@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
-import 'package:search_page/search_page.dart';
-import 'package:velibetter/core/models/Station.dart';
 import 'package:velibetter/ui/search_screen/search_viewmodel.dart';
 
 // Since the state was moved to the view model, this is now a StatelessWidget.
@@ -10,36 +8,56 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // ViewModelProvider is what provides the view model to the widget tree.
     return ViewModelProvider<SearchViewModel>.withConsumer(
-      viewModel: SearchViewModel(),
-      onModelReady: (model) => model.fetchStations(),
-      builder: (context, model, child) => Scaffold(
-        body: FloatingActionButton(
-          child: Icon(Icons.search),
-          tooltip: 'Search station',
-          onPressed: () => showSearch(
-            context: context,
-            delegate: SearchPage<Station>(
-              items: model.listStations,
-              searchLabel: 'Search station',
-              suggestion: Center(
-                child: Text('Filter station by name, or code'),
+        viewModel: SearchViewModel(),
+        onModelReady: (model) => model.fetchStations(),
+        builder: (context, model, child) => Scaffold(
+              body: Container(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        onChanged: (value) => model.filterItems(value),
+                        controller: model.editingController,
+                        decoration: InputDecoration(
+                            labelText: "Destination",
+                            hintText: "Destination",
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25.0)))),
+                      ),
+                    ),
+                    Expanded(
+                      child: model.filteredStations != null
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: model.filteredStations != null
+                                  ? model.filteredStations.length
+                                  : 0,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text(
+                                      '${model.filteredStations[index].name}'),
+                                );
+                              },
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: model.listStations != null
+                                  ? model.listStations.length
+                                  : 0,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title:
+                                      Text('${model.listStations[index].name}'),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
+                ),
               ),
-              failure: Center(
-                child: Text('No person found :('),
-              ),
-              filter: (station) => [
-                station.name,
-                station.stationCode
-              ],
-              builder: (station) => ListTile(
-                title: Text(station.name),
-                subtitle: Text(station.stationCode),
-                trailing: Text('${station.lat} ${station.lon}'),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+            ));
   }
 }

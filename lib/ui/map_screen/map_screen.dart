@@ -39,9 +39,7 @@ class MapScreen extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            model.localizeUser();
-          },
+          onPressed: () => model.toSearchPage(context),
           tooltip: 'Go!',
           child: Icon(Icons.directions_bike),
         ),
