@@ -41,7 +41,7 @@ class MapScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () => model.toSearchPage(context),
           tooltip: 'Go!',
-          child: Icon(Icons.directions_bike),
+          child: Icon(Icons.search),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),

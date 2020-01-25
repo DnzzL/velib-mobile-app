@@ -29,16 +29,16 @@ class SearchScreen extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: model.filteredStations != null
+                      child: model.placemark != null
                           ? ListView.builder(
                               shrinkWrap: true,
-                              itemCount: model.filteredStations != null
-                                  ? model.filteredStations.length
+                              itemCount: model.placemark != null
+                                  ? model.placemark.length
                                   : 0,
                               itemBuilder: (context, index) {
                                 return ListTile(
                                   title: Text(
-                                      '${model.filteredStations[index].name}'),
+                                      '${model.placemark[index].name} ${model.placemark[index].locality}'),
                                 );
                               },
                             )
