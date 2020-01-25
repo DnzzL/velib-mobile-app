@@ -1,13 +1,20 @@
 class Station {
-  num station_id, lat, lon, capacity;
+  num station_id, lat, lon, capacity, distance = 0;
   String name, stationCode;
   List<String> rental_methods = List<String>();
 
   Station(this.station_id, this.lat, this.lon, this.capacity, this.name,
-      this.stationCode, this.rental_methods);
+      this.stationCode, this.rental_methods, this.distance);
 
   factory Station.fromJson(Map<String, dynamic> json) {
-    return Station(json['station_id'], json['lat'], json['lon'],
-        json['capacity'], json['name'], json['stationCode'], List<String>());
+    return Station(
+        json['station_id'],
+        json['lat'],
+        json['lon'],
+        json['capacity'],
+        json['name'],
+        json['stationCode'],
+        List<String>(),
+        json['distance']);
   }
 }

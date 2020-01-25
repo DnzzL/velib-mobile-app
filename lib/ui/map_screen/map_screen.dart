@@ -11,7 +11,10 @@ class MapScreen extends StatelessWidget {
     // ViewModelProvider is what provides the view model to the widget tree.
     return ViewModelProvider<MapViewModel>.withConsumer(
       viewModel: MapViewModel(),
-      onModelReady: (model) => model.localizeUser(),
+      onModelReady: (model) {
+        model.fetchStations();
+        model.localizeUserLive();
+      },
       builder: (context, model, child) => Scaffold(
         body: FlutterMap(
           mapController: model.mapController,
@@ -25,16 +28,22 @@ class MapScreen extends StatelessWidget {
               subdomains: ['a', 'b', 'c'],
             ),
             new MarkerLayerOptions(
-              markers: [
-                new Marker(
-                  width: 30.0,
-                  height: 30.0,
-                  point: model.userPosition,
-                  builder: (ctx) => new Container(
-                    child: Icon(Icons.location_on),
-                  ),
-                ),
-              ],
+              markers: model.listStationsMarkers != null
+                  ? [
+                      ...model.listStationsMarkers,
+                      new Marker(
+                        width: 30.0,
+                        height: 30.0,
+                        point: model.userPosition,
+                        builder: (ctx) => new Container(
+                          child: Icon(
+                            Icons.my_location,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                    ]
+                  : [],
             ),
           ],
         ),

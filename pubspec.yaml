@@ -14,7 +14,7 @@ description: Velib front
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -26,7 +26,6 @@ dependencies:
   provider_architecture: ^1.0.5
   flutter_map: 0.8.2
   latlong: 0.6.1
-  location: 2.3.5
   http: 0.12.0+4
   geolocator: 5.2.0
 

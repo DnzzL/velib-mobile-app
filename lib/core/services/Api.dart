@@ -30,4 +30,19 @@ class Api {
       throw Exception('Failed to load post');
     }
   }
+
+  Future<List<Station>> fetchClosestStations(num latitude, num longitude) async {
+    var url = '$root/closest/$latitude/$longitude';
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      List<Station> stations = new List<Station>.from(
+          jsonDecode(utf8.decode(response.bodyBytes))
+              .map((e) => Station.fromJson(e))
+              .toList());
+      return stations;
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
 }

@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:velibetter/core/models/Station.dart';
 import 'package:velibetter/core/services/Api.dart';
+import 'package:velibetter/core/services/Geoloc.dart';
 
 class SearchViewModel extends ChangeNotifier {
   Api _api = Api();
+  Geoloc _geolocService = Geoloc();
   List<Station> _listStations;
+  List<Station> _filteredStations;
   List<Placemark> _placemark;
   TextEditingController _editingController = TextEditingController();
 
@@ -16,24 +19,29 @@ class SearchViewModel extends ChangeNotifier {
 
   List<Placemark> get placemark => _placemark;
 
-  void fetchStations() async {
-    _listStations = await _api.fetchStations();
+  List<Station> get filteredStations => _filteredStations;
+
+  void fetchClosestStations() async {
+    Position currentPosition = await _geolocService.localizeUser();
+    _listStations = await _api.fetchClosestStations(currentPosition.latitude, currentPosition.longitude);
     notifyListeners();
   }
 
   void filterItems(String value) async {
-    try {
-      _placemark = await Geolocator()
-          .placemarkFromAddress(value, localeIdentifier: "fr_FR");
-      print(_placemark.map((p) => p.name));
-    } catch (e) {
-      _placemark = List<Placemark>();
-    } finally {
-      notifyListeners();
-    }
-//    _filteredStations = _listStations
-//        .where((station) =>
-//            station.name.toLowerCase().contains(value.toLowerCase()))
-//        .toList();
+//    try {
+//      _placemark = await Geolocator()
+//          .placemarkFromAddress(value, localeIdentifier: "fr_FR");
+//      print(_placemark.map((p) => p.name));
+//    } catch (e) {
+//      _placemark = List<Placemark>();
+//    } finally {
+//      notifyListeners();
+//    }
+
+    _filteredStations = _listStations
+        .where((station) =>
+            station.name.toLowerCase().contains(value.toLowerCase()))
+        .toList();
+    notifyListeners();
   }
 }

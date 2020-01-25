@@ -9,13 +9,13 @@ class SearchScreen extends StatelessWidget {
     // ViewModelProvider is what provides the view model to the widget tree.
     return ViewModelProvider<SearchViewModel>.withConsumer(
         viewModel: SearchViewModel(),
-        onModelReady: (model) => model.fetchStations(),
+        onModelReady: (model) => model.fetchClosestStations(),
         builder: (context, model, child) => Scaffold(
               body: Container(
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.fromLTRB(10.0, 35.0, 10.0, 0.0),
                       child: TextField(
                         onChanged: (value) => model.filterItems(value),
                         controller: model.editingController,
@@ -29,16 +29,16 @@ class SearchScreen extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: model.placemark != null
+                      child: model.filteredStations != null
                           ? ListView.builder(
                               shrinkWrap: true,
-                              itemCount: model.placemark != null
-                                  ? model.placemark.length
+                              itemCount: model.filteredStations != null
+                                  ? model.filteredStations.length
                                   : 0,
                               itemBuilder: (context, index) {
                                 return ListTile(
                                   title: Text(
-                                      '${model.placemark[index].name} ${model.placemark[index].locality}'),
+                                      '${model.filteredStations[index].name}'),
                                 );
                               },
                             )
