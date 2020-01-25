@@ -29,6 +29,7 @@ dependencies:
   location: 2.3.5
   search_widget: 1.0.1
   http: 0.12.0+4
+  search_page: 1.0.0
 
 dev_dependencies:
   flutter_test:

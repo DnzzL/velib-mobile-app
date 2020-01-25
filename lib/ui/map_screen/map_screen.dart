@@ -17,17 +17,12 @@ class MapScreen extends StatelessWidget {
           mapController: model.mapController,
           options: new MapOptions(
             center: LatLng(48.857607, 2.3473629999999996),
-            zoom: 13.0,
+            zoom: 14.0,
           ),
           layers: [
             new TileLayerOptions(
-              urlTemplate: "https://api.tiles.mapbox.com/v4/"
-                  "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
-              additionalOptions: {
-                'accessToken':
-                    'pk.eyJ1IjoiZG56emwiLCJhIjoiY2s1c2FkcXJjMDkwNTNwcDZweWlwMXA3cyJ9.7ygPJLlm081pe1gGalAXiA',
-                'id': 'mapbox.streets',
-              },
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c'],
             ),
             new MarkerLayerOptions(
               markers: [

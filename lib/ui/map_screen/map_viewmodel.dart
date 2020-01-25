@@ -15,7 +15,7 @@ class MapViewModel extends ChangeNotifier {
     location.onLocationChanged().listen((LocationData currentLocation) {
       _userPosition =
           LatLng(currentLocation.latitude, currentLocation.longitude);
-      mapController.move(_userPosition, 13.0);
+      mapController.move(_userPosition, 14.0);
       notifyListeners();
     });
   }
