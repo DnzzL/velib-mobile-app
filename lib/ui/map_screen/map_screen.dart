@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:velibetter/ui/map_screen/map_viewmodel.dart';
@@ -47,10 +48,25 @@ class MapScreen extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => model.toSearchPage(context),
-          tooltip: 'Go!',
-          child: Icon(Icons.search),
+        floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.menu_close,
+          marginRight: 25.0,
+          children: [
+            SpeedDialChild(
+                child: Icon(Icons.search),
+                label: "Search",
+                onTap: () => print("")),
+            SpeedDialChild(
+                child: Icon(Icons.directions_bike),
+                backgroundColor: Colors.greenAccent,
+                label: "Take",
+                onTap: () => model.toTakePage(context)),
+            SpeedDialChild(
+                child: Icon(Icons.build),
+                backgroundColor: Colors.redAccent,
+                label: "Give Back",
+                onTap: () => print("")),
+          ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),

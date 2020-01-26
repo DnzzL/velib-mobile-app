@@ -6,6 +6,7 @@ import 'package:latlong/latlong.dart';
 import 'package:velibetter/core/models/Station.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/ui/search_screen/search_screen.dart';
+import 'package:velibetter/ui/take_screen/take_screen.dart';
 
 class MapViewModel extends ChangeNotifier {
   Api _api = Api();
@@ -37,7 +38,8 @@ class MapViewModel extends ChangeNotifier {
           opacity: 0.8,
           child: Icon(
             Icons.location_on,
-            size: 15,
+            size: 20,
+            color: Colors.redAccent,
           ),
         )),
       );
@@ -59,6 +61,14 @@ class MapViewModel extends ChangeNotifier {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SearchScreen()),
+    );
+    notifyListeners();
+  }
+
+  void toTakePage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TakeScreen()),
     );
     notifyListeners();
   }

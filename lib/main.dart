@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:velibetter/ui/map_screen/map_screen.dart';
-import 'package:velibetter/ui/search_screen/search_screen.dart';
 
 void main() => runApp(MyApp());
 
