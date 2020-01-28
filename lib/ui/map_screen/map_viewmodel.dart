@@ -5,11 +5,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:velibetter/core/models/Station.dart';
 import 'package:velibetter/core/services/Api.dart';
+import 'package:velibetter/core/services/Geoloc.dart';
 import 'package:velibetter/ui/search_screen/search_screen.dart';
 import 'package:velibetter/ui/take_screen/take_screen.dart';
 
 class MapViewModel extends ChangeNotifier {
   Api _api = Api();
+  Geoloc _geolocService = Geoloc();
   LatLng _userPosition;
   List<Station> _listStations;
   List<Marker> _listStationsMarkers;
@@ -27,7 +29,9 @@ class MapViewModel extends ChangeNotifier {
   List<Marker> get listStationsMarkers => _listStationsMarkers;
 
   void fetchStations() async {
-    _listStations = await _api.fetchStations();
+    Position currentPosition = await _geolocService.localizeUser();
+    _listStations = await _api.fetchStations(
+        currentPosition.latitude, currentPosition.longitude);
     _listStationsMarkers = _listStations.map((station) {
       return Marker(
         width: 10.0,

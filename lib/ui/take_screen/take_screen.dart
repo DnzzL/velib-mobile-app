@@ -9,7 +9,7 @@ class TakeScreen extends StatelessWidget {
     // ViewModelProvider is what provides the view model to the widget tree.
     return ViewModelProvider<TakeViewModel>.withConsumer(
         viewModel: TakeViewModel(),
-        onModelReady: (model) => model.fetchClosestStations(),
+        onModelReady: (model) => model.getClosestStationsWithBikes(),
         builder: (context, model, child) => Scaffold(
               body: Container(
                 child: Container(
@@ -30,7 +30,8 @@ class TakeScreen extends StatelessWidget {
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20.0, vertical: 10.0),
                                   leading: Container(
-                                    padding: EdgeInsets.only(right: 12.0, top: 8.0),
+                                    padding:
+                                        EdgeInsets.only(right: 12.0, top: 8.0),
                                     decoration: new BoxDecoration(
                                         border: new Border(
                                             right: new BorderSide(
@@ -55,8 +56,8 @@ class TakeScreen extends StatelessWidget {
                                         size: 18,
                                       ),
                                       Text(
-                                          model.listStationsStatus != null
-                                              ? ' ${model.listStationsStatus[index].mechanical}'
+                                          model.listStations != null
+                                              ? ' ${model.listStationsWithBikes[index].lastState.mechanical}'
                                               : ' 0',
                                           style:
                                               TextStyle(color: Colors.white)),
@@ -70,8 +71,8 @@ class TakeScreen extends StatelessWidget {
                                         size: 18,
                                       ),
                                       Text(
-                                          model.listStationsStatus != null
-                                              ? ' ${model.listStationsStatus[index].ebike}'
+                                          model.listStations != null
+                                              ? ' ${model.listStationsWithBikes[index].lastState.ebike}'
                                               : '0',
                                           style: TextStyle(color: Colors.white))
                                     ],

@@ -23,7 +23,8 @@ class SearchViewModel extends ChangeNotifier {
 
   void fetchClosestStations() async {
     Position currentPosition = await _geolocService.localizeUser();
-    _listStations = await _api.fetchClosestStations(currentPosition.latitude, currentPosition.longitude);
+    _api.fetchStations(currentPosition.latitude, currentPosition.longitude);
+    _listStations = _api.listStations;
     notifyListeners();
   }
 

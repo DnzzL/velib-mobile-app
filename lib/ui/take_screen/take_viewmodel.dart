@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:velibetter/core/models/Station.dart';
-import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
 
@@ -10,14 +9,13 @@ class TakeViewModel extends ChangeNotifier {
   Api _api = Api();
   Geoloc _geolocService = Geoloc();
   List<Station> _listStations;
-  List<StationStatus> _listStationsStatus;
+  List<Station> _listStationsWithBikes;
   List<Station> _filteredStations;
   List<Placemark> _placemark;
   TextEditingController _editingController = TextEditingController();
 
   List<Station> get listStations => _listStations;
-
-  List<StationStatus> get listStationsStatus => _listStationsStatus;
+  List<Station> get listStationsWithBikes => _listStationsWithBikes;
 
   TextEditingController get editingController => _editingController;
 
@@ -25,21 +23,20 @@ class TakeViewModel extends ChangeNotifier {
 
   List<Station> get filteredStations => _filteredStations;
 
-  void fetchClosestStations() async {
+  void getClosestStationsWithBikes() async {
     Position currentPosition = await _geolocService.localizeUser();
-    _listStations = await _api.fetchClosestStations(
+    _listStations = await _api.fetchStations(
         currentPosition.latitude, currentPosition.longitude);
-    _listStationsStatus = await Future.wait(_listStations
-        .getRange(0, 10)
-        .map((station) => _api.fetchNumberBikesAtStation(station.station_id))
-        .toList());
+    _listStationsWithBikes = _listStations.where((station) =>
+        station.lastState.mechanical > 0 || station.lastState.ebike > 0);
     notifyListeners();
   }
 
   double getAvailability(int index, String type) {
     return type == "mechanical"
-        ? _listStationsStatus[index].mechanical / _listStations[index].capacity
-        : _listStationsStatus[index].ebike / _listStations[index].capacity;
+        ? _listStations[index].lastState.mechanical /
+            _listStations[index].capacity
+        : _listStations[index].lastState.ebike / _listStations[index].capacity;
   }
 
   Color getAvailabilityColor(int index, String type) {

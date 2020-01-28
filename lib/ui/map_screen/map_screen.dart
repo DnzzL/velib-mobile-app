@@ -13,8 +13,8 @@ class MapScreen extends StatelessWidget {
     return ViewModelProvider<MapViewModel>.withConsumer(
       viewModel: MapViewModel(),
       onModelReady: (model) {
-        model.fetchStations();
         model.localizeUserLive();
+        model.fetchStations();
       },
       builder: (context, model, child) => Scaffold(
         body: FlutterMap(
@@ -55,7 +55,7 @@ class MapScreen extends StatelessWidget {
             SpeedDialChild(
                 child: Icon(Icons.search),
                 label: "Search",
-                onTap: () => print("")),
+                onTap: () => model.toSearchPage(context)),
             SpeedDialChild(
                 child: Icon(Icons.directions_bike),
                 backgroundColor: Colors.greenAccent,

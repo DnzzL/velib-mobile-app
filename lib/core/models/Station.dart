@@ -1,10 +1,23 @@
+import 'package:velibetter/core/models/StationStatus.dart';
+
 class Station {
-  num station_id, lat, lon, capacity, distance = 0;
+  num stationId, lat, lon, capacity, indexDeparture, indexArrival, distance = 0;
   String name, stationCode;
   List<String> rental_methods = List<String>();
+  StationStatus lastState;
 
-  Station(this.station_id, this.lat, this.lon, this.capacity, this.name,
-      this.stationCode, this.rental_methods, this.distance);
+  Station(
+      this.stationId,
+      this.lat,
+      this.lon,
+      this.capacity,
+      this.name,
+      this.stationCode,
+      this.rental_methods,
+      this.distance,
+      this.lastState,
+      this.indexDeparture,
+      this.indexArrival);
 
   factory Station.fromJson(Map<String, dynamic> json) {
     return Station(
@@ -15,6 +28,9 @@ class Station {
         json['name'],
         json['stationCode'],
         List<String>(),
-        json['distance']);
+        json['distance'],
+        StationStatus.fromJson(json['last_state']),
+        json['index_departure'],
+        json['index_arrival']);
   }
 }
