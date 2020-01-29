@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:provider_architecture/provider_architecture.dart';
-import 'package:velibetter/ui/take_screen/take_viewmodel.dart';
+import 'package:velibetter/ui/arrival_screen/arrival_viewmodel.dart';
 
 // Since the state was moved to the view model, this is now a StatelessWidget.
-class TakeScreen extends StatelessWidget {
+class ArrivalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ViewModelProvider is what provides the view model to the widget tree.
-    return ViewModelProvider<TakeViewModel>.withConsumer(
-        viewModel: TakeViewModel(),
-        onModelReady: (model) => model.getClosestStationsWithBikes(),
+    return ViewModelProvider<ArrivalViewModel>.withConsumer(
+        viewModel: ArrivalViewModel(),
+        onModelReady: (model) => model.getClosestStationsWithDocks(),
         builder: (context, model, child) => Scaffold(
               body: Container(
                 child: Container(
@@ -50,31 +51,17 @@ class TakeScreen extends StatelessWidget {
                                   subtitle: Row(
                                     children: <Widget>[
                                       Icon(
-                                        Icons.settings,
-                                        color: model.getAvailabilityColor(
-                                            index, "mechanical"),
+                                        Icons.equalizer,
+                                        color:
+                                            model.getAvailabilityColor(index),
                                         size: 18,
                                       ),
                                       Text(
                                           model.listStations != null
-                                              ? ' ${model.listStationsWithBikes[index].lastState.mechanical}'
+                                              ? ' Docks available: ${model.listStationsWithBikes[index].lastState.num_docks_available}'
                                               : ' 0',
                                           style:
                                               TextStyle(color: Colors.white)),
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                      ),
-                                      Icon(
-                                        Icons.flash_on,
-                                        color: model.getAvailabilityColor(
-                                            index, "ebike"),
-                                        size: 18,
-                                      ),
-                                      Text(
-                                          model.listStations != null
-                                              ? ' ${model.listStationsWithBikes[index].lastState.ebike}'
-                                              : '0',
-                                          style: TextStyle(color: Colors.white))
                                     ],
                                   ),
                                   trailing: Icon(Icons.keyboard_arrow_right,
@@ -85,7 +72,9 @@ class TakeScreen extends StatelessWidget {
                             );
                           },
                         )
-                      : Container(),
+                      : LoadingDoubleFlipping.circle(
+                          backgroundColor: Colors.blueAccent,
+                        ),
                 ),
               ),
             ));

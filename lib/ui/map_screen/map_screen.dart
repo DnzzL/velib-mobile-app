@@ -53,19 +53,19 @@ class MapScreen extends StatelessWidget {
           marginRight: 25.0,
           children: [
             SpeedDialChild(
+                child: Icon(Icons.directions_bike),
+                backgroundColor: Colors.green,
+                label: "Departure",
+                onTap: () => model.toDeparturePage(context)),
+            SpeedDialChild(
+                child: Icon(Icons.build),
+                backgroundColor: Colors.red,
+                label: "Arrival",
+                onTap: () => model.toArrivalPage(context)),
+            SpeedDialChild(
                 child: Icon(Icons.search),
                 label: "Search",
                 onTap: () => model.toSearchPage(context)),
-            SpeedDialChild(
-                child: Icon(Icons.directions_bike),
-                backgroundColor: Colors.greenAccent,
-                label: "Take",
-                onTap: () => model.toTakePage(context)),
-            SpeedDialChild(
-                child: Icon(Icons.build),
-                backgroundColor: Colors.redAccent,
-                label: "Give Back",
-                onTap: () => print("")),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

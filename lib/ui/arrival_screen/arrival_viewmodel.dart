@@ -5,7 +5,7 @@ import 'package:velibetter/core/models/Station.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
 
-class TakeViewModel extends ChangeNotifier {
+class ArrivalViewModel extends ChangeNotifier {
   Api _api = Api();
   Geoloc _geolocService = Geoloc();
   List<Station> _listStations;
@@ -24,26 +24,23 @@ class TakeViewModel extends ChangeNotifier {
 
   List<Station> get filteredStations => _filteredStations;
 
-  void getClosestStationsWithBikes() async {
+  void getClosestStationsWithDocks() async {
     Position currentPosition = await _geolocService.localizeUser();
     _listStations = await _api.fetchStations(
         currentPosition.latitude, currentPosition.longitude);
     _listStationsWithBikes = _listStations
-        .where((station) =>
-            station.lastState.mechanical > 0 || station.lastState.ebike > 0)
+        .where((station) => station.lastState.num_docks_available > 0)
         .toList();
     notifyListeners();
   }
 
-  double getAvailability(int index, String type) {
-    return type == "mechanical"
-        ? _listStations[index].lastState.mechanical /
-            _listStations[index].capacity
-        : _listStations[index].lastState.ebike / _listStations[index].capacity;
+  double getAvailability(int index) {
+    return _listStations[index].lastState.num_docks_available /
+        _listStations[index].capacity;
   }
 
-  Color getAvailabilityColor(int index, String type) {
-    var availability = getAvailability(index, type);
+  Color getAvailabilityColor(int index) {
+    var availability = getAvailability(index);
     if (availability < 0.2) {
       return Colors.red;
     }
