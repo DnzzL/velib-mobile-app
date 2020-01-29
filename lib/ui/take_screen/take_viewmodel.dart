@@ -15,6 +15,7 @@ class TakeViewModel extends ChangeNotifier {
   TextEditingController _editingController = TextEditingController();
 
   List<Station> get listStations => _listStations;
+
   List<Station> get listStationsWithBikes => _listStationsWithBikes;
 
   TextEditingController get editingController => _editingController;
@@ -27,8 +28,10 @@ class TakeViewModel extends ChangeNotifier {
     Position currentPosition = await _geolocService.localizeUser();
     _listStations = await _api.fetchStations(
         currentPosition.latitude, currentPosition.longitude);
-    _listStationsWithBikes = _listStations.where((station) =>
-        station.lastState.mechanical > 0 || station.lastState.ebike > 0);
+    _listStationsWithBikes = _listStations
+        .where((station) =>
+            station.lastState.mechanical > 0 || station.lastState.ebike > 0)
+        .toList();
     notifyListeners();
   }
 
