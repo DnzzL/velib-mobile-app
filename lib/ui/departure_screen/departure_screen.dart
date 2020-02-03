@@ -58,7 +58,7 @@ class DepartureScreen extends StatelessWidget {
                                         ),
                                         Text(
                                             model.listStations != null
-                                                ? ' ${model.listStationsWithBikes[index].lastState.mechanical}'
+                                                ? ' Mechanical: ${model.listStationsWithBikes[index].lastState.mechanical}'
                                                 : ' 0',
                                             style:
                                                 TextStyle(color: Colors.white)),
@@ -73,7 +73,7 @@ class DepartureScreen extends StatelessWidget {
                                         ),
                                         Text(
                                             model.listStations != null
-                                                ? ' ${model.listStationsWithBikes[index].lastState.ebike}'
+                                                ? ' Ebike: ${model.listStationsWithBikes[index].lastState.ebike}'
                                                 : '0',
                                             style:
                                                 TextStyle(color: Colors.white))

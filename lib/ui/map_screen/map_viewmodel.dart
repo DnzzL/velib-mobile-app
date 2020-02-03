@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:velibetter/core/models/Station.dart';
+import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
 import 'package:velibetter/ui/arrival_screen/arrival_screen.dart';
@@ -14,7 +14,7 @@ class MapViewModel extends ChangeNotifier {
   Api _api = Api();
   Geoloc _geolocService = Geoloc();
   LatLng _userPosition;
-  List<Station> _listStations;
+  List<StationStatus> _listStations;
   List<Marker> _listStationsMarkers;
 
   var geolocator = Geolocator();
@@ -25,7 +25,7 @@ class MapViewModel extends ChangeNotifier {
 
   LatLng get userPosition => _userPosition;
 
-  List<Station> get listStations => _listStations;
+  List<StationStatus> get listStations => _listStations;
 
   List<Marker> get listStationsMarkers => _listStationsMarkers;
 

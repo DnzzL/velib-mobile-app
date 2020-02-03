@@ -1,30 +1,30 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:velibetter/core/models/Station.dart';
+import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
 
 class SearchViewModel extends ChangeNotifier {
   Api _api = Api();
   Geoloc _geolocService = Geoloc();
-  List<Station> _listStations;
-  List<Station> _filteredStations;
+  List<StationStatus> _listStations;
+  List<StationStatus> _filteredStations;
   List<Placemark> _placemark;
   TextEditingController _editingController = TextEditingController();
 
-  List<Station> get listStations => _listStations;
+  List<StationStatus> get listStations => _listStations;
 
   TextEditingController get editingController => _editingController;
 
   List<Placemark> get placemark => _placemark;
 
-  List<Station> get filteredStations => _filteredStations;
+  List<StationStatus> get filteredStations => _filteredStations;
 
   void fetchClosestStations() async {
     Position currentPosition = await _geolocService.localizeUser();
     _api.fetchStations(currentPosition.latitude, currentPosition.longitude);
-    _listStations = _api.listStations;
+    _listStations = _api.listStationStatus;
     notifyListeners();
   }
 

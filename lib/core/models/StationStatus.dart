@@ -1,33 +1,32 @@
+import 'package:velibetter/core/models/NumBikesAvailableTypes.dart';
+
 class StationStatus {
-  num num_bikes_available,
-      num_docks_available,
-      is_installed,
-      is_returning,
-      is_renting,
-      last_reported,
-      mechanical,
-      ebike;
+  String stationCode;
+  num stationId, numBikesAvailable, numDocksAvailable, lastReported;
+  bool isInstalled, isReturning, isRenting;
+  NumBikesAvailableTypes numBikesAvailableTypes;
 
   StationStatus(
-      this.num_bikes_available,
-      this.num_docks_available,
-      this.is_installed,
-      this.is_returning,
-      this.is_renting,
-      this.last_reported,
-      this.mechanical,
-      this.ebike);
+      this.stationCode,
+      this.stationId,
+      this.numBikesAvailable,
+      this.numBikesAvailableTypes,
+      this.numDocksAvailable,
+      this.isInstalled,
+      this.isReturning,
+      this.isRenting,
+      this.lastReported);
 
   factory StationStatus.fromJson(Map<String, dynamic> json) {
     return StationStatus(
-      json['num_bikes_available'],
-      json['num_docks_available'],
-      json['is_installed'],
-      json['is_returning'],
-      json['is_renting'],
-      json['last_reported'],
-      json['mechanical'],
-      json['ebike'],
-    );
+        json['stationCode'],
+        json['station_id'],
+        json['num_bikes_available'],
+        NumBikesAvailableTypes.fromJson(json['num_bikes_available_types']),
+        json['num_docks_available'],
+        json['is_installed'],
+        json['is_returning'],
+        json['is_renting'],
+        json['last_reported']);
   }
 }
