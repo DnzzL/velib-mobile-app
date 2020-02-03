@@ -42,7 +42,7 @@ class DepartureScreen extends StatelessWidget {
                                           color: Colors.white),
                                     ),
                                     title: Text(
-                                      '${model.listStations[index].name}',
+                                      '${model.listStations[index].stationId}',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold),
@@ -58,7 +58,7 @@ class DepartureScreen extends StatelessWidget {
                                         ),
                                         Text(
                                             model.listStations != null
-                                                ? ' Mechanical: ${model.listStationsWithBikes[index].lastState.mechanical}'
+                                                ? ' Mechanical: ${model.listStationsWithBikes[index].numBikesAvailableTypes.mechanical}'
                                                 : ' 0',
                                             style:
                                                 TextStyle(color: Colors.white)),
@@ -73,7 +73,7 @@ class DepartureScreen extends StatelessWidget {
                                         ),
                                         Text(
                                             model.listStations != null
-                                                ? ' Ebike: ${model.listStationsWithBikes[index].lastState.ebike}'
+                                                ? ' Ebike: ${model.listStationsWithBikes[index].numBikesAvailableTypes.ebike}'
                                                 : '0',
                                             style:
                                                 TextStyle(color: Colors.white))

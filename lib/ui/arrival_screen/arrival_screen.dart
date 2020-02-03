@@ -42,7 +42,7 @@ class ArrivalScreen extends StatelessWidget {
                                         Icon(Icons.store, color: Colors.white),
                                   ),
                                   title: Text(
-                                    '${model.listStations[index].name}',
+                                    '${model.listStations[index].stationId}',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
@@ -58,7 +58,7 @@ class ArrivalScreen extends StatelessWidget {
                                       ),
                                       Text(
                                           model.listStations != null
-                                              ? ' Docks available: ${model.listStationsWithBikes[index].lastState.num_docks_available}'
+                                              ? ' Docks available: ${model.listStationsWithBikes[index].numDocksAvailable}'
                                               : ' 0',
                                           style:
                                               TextStyle(color: Colors.white)),

@@ -41,9 +41,3 @@ class Api {
     }
   }
 }
-
-void main() {
-  var _api = Api();
-  print(_api.fetchInfo());
-  print(_api.fetchStatus());
-}
