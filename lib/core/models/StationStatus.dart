@@ -24,9 +24,9 @@ class StationStatus {
         json['num_bikes_available'],
         NumBikesAvailableTypes.fromJson(json['num_bikes_available_types']),
         json['num_docks_available'],
-        json['is_installed'],
-        json['is_returning'],
-        json['is_renting'],
+        json['is_installed'] == 1 ? true : false,
+        json['is_returning'] == 1 ? true : false,
+        json['is_renting'] == 1 ? true : false,
         json['last_reported']);
   }
 }

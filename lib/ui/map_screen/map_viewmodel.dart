@@ -4,11 +4,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:velibetter/core/models/StationInfo.dart';
-import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
 import 'package:velibetter/ui/arrival_screen/arrival_screen.dart';
-import 'package:velibetter/ui/search_screen/search_screen.dart';
 import 'package:velibetter/ui/departure_screen/departure_screen.dart';
 
 class MapViewModel extends ChangeNotifier {

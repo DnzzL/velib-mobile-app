@@ -16,9 +16,10 @@ class Api {
     try {
       var file = await cacheManager.getSingleFile(url);
       var response = file.readAsStringSync();
-      listStationStatus = new List<StationStatus>.from(jsonDecode(response)
-          .map((e) => StationStatus.fromJson(e["data"]["stations"]))
-          .toList());
+      listStationStatus = new List<StationStatus>.from(
+          jsonDecode(response)['data']['stations']
+              .map((e) => StationStatus.fromJson(e))
+              .toList());
       return listStationStatus;
     } on Exception catch (e) {
       throw Exception(e);
@@ -28,16 +29,16 @@ class Api {
   Future<List<StationInfo>> fetchInfo() async {
     var url =
         'https://velib-metropole-opendata.smoove.pro/opendata/Velib_Metropole/station_information.json';
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      listStationInfo = new List<StationInfo>.from(
-          jsonDecode(utf8.decode(response.bodyBytes))
-              .map((e) => StationInfo.fromJson(e["data"]["stations"]))
-              .toList());
+    try {
+      var file = await cacheManager.getSingleFile(url);
+      var response = file.readAsStringSync();
+      listStationInfo = new List<StationInfo>.from(jsonDecode(response)['data']
+              ['stations']
+          .map((e) => StationInfo.fromJson(e))
+          .toList());
       return listStationInfo;
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('Failed to fetch Velib API');
+    } on Exception catch (e) {
+      throw Exception(e);
     }
   }
 }

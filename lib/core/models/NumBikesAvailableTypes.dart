@@ -3,7 +3,7 @@ class NumBikesAvailableTypes {
 
   NumBikesAvailableTypes(this.mechanical, this.ebike);
 
-  factory NumBikesAvailableTypes.fromJson(Map<String, dynamic> json) {
+  factory NumBikesAvailableTypes.fromJson(List<dynamic> json) {
     return NumBikesAvailableTypes(
       json[0]["mechanical"],
       json[1]["ebike"],

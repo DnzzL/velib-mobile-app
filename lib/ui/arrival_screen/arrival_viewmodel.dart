@@ -32,7 +32,7 @@ class ArrivalViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  double getAvailability(int index) {
+  num getAvailability(int index) {
     return _listStationStatus[index].numDocksAvailable;
   }
 
