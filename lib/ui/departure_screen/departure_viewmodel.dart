@@ -1,44 +1,74 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:velibetter/core/models/Station.dart';
+import 'package:latlong/latlong.dart';
+import 'package:velibetter/core/models/StationInfo.dart';
+import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
 
 class DepartureViewModel extends ChangeNotifier {
   Api _api = Api();
   Geoloc _geolocService = Geoloc();
-  List<Station> _listStations;
-  List<Station> _listStationsWithBikes;
-  List<Station> _filteredStations;
-  List<Placemark> _placemark;
+  List<StationStatus> _listStationStatus;
+  List<StationInfo> _listStationInfo;
+  List<StationStatus> _listStationsWithBikes;
+  List<String> _listStationNameSortedByDistance;
+  List<StationStatus> _filteredStations;
   TextEditingController _editingController = TextEditingController();
 
-  List<Station> get listStations => _listStations;
+  List<StationStatus> get listStationStatus => _listStationStatus;
 
-  List<Station> get listStationsWithBikes => _listStationsWithBikes;
+  List<StationInfo> get listStationInfo => _listStationInfo;
+
+  List<StationStatus> get listStationsWithBikes => _listStationsWithBikes;
+
+  List<String> get listStationNameSortedByDistance =>
+      _listStationNameSortedByDistance;
 
   TextEditingController get editingController => _editingController;
 
-  List<Placemark> get placemark => _placemark;
+  List<StationStatus> get filteredStations => _filteredStations;
 
-  List<Station> get filteredStations => _filteredStations;
+  Future<Map<int, int>> getStationDistances() async {
+    var sortable = <int, int>{};
+    Position currentPosition = await _geolocService.localizeUser();
+    var userPosition =
+        LatLng(currentPosition.latitude, currentPosition.longitude);
+    for (var stationInfo in _listStationInfo) {
+      var distance = await _geolocService.distanceBetween(userPosition.latitude,
+          userPosition.longitude, stationInfo.lat, stationInfo.lon);
+      sortable[stationInfo.stationId] = distance.ceil();
+    }
+    return sortable;
+  }
 
   void getClosestStationsWithBikes() async {
-    Position currentPosition = await _geolocService.localizeUser();
-    _listStations = await _api.fetchStations(
-        currentPosition.latitude, currentPosition.longitude);
-    _listStationsWithBikes = _listStations
-        .where((station) => station.lastState.num_bikes_available > 0)
+    _listStationStatus = await _api.fetchStatus();
+    _listStationInfo = await _api.fetchInfo();
+    _listStationsWithBikes = _listStationStatus
+        .where((stationStatus) => stationStatus.numBikesAvailable > 0)
         .toList();
+    var distances = await getStationDistances();
+    _listStationsWithBikes
+        .sort((a, b) => distances[a.stationId] - distances[b.stationId]);
+    _listStationNameSortedByDistance =
+        _listStationsWithBikes.map((stationStatus) {
+      var stationInfo = _listStationInfo
+          .where(
+              (stationInfo) => stationInfo.stationId == stationStatus.stationId)
+          .toList()[0];
+      return stationInfo.name;
+    }).toList();
     notifyListeners();
   }
 
   double getAvailability(int index, String type) {
     return type == "mechanical"
-        ? _listStations[index].lastState.mechanical /
-            _listStations[index].capacity
-        : _listStations[index].lastState.ebike / _listStations[index].capacity;
+        ? _listStationStatus[index].numBikesAvailableTypes.mechanical /
+            _listStationInfo[index].capacity
+        : _listStationStatus[index].numBikesAvailableTypes.ebike /
+            _listStationInfo[index].capacity;
   }
 
   Color getAvailabilityColor(int index, String type) {

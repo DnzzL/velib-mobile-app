@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:velibetter/core/models/Station.dart';
+import 'package:velibetter/core/models/StationInfo.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
 import 'package:velibetter/ui/arrival_screen/arrival_screen.dart';
-import 'package:velibetter/ui/search_screen/search_screen.dart';
 import 'package:velibetter/ui/departure_screen/departure_screen.dart';
 
 class MapViewModel extends ChangeNotifier {
   Api _api = Api();
   Geoloc _geolocService = Geoloc();
   LatLng _userPosition;
-  List<Station> _listStations;
+  List<StationInfo> _listStationInfo;
   List<Marker> _listStationsMarkers;
 
   var geolocator = Geolocator();
@@ -25,15 +24,13 @@ class MapViewModel extends ChangeNotifier {
 
   LatLng get userPosition => _userPosition;
 
-  List<Station> get listStations => _listStations;
+  List<StationInfo> get listStations => _listStationInfo;
 
   List<Marker> get listStationsMarkers => _listStationsMarkers;
 
   void fetchStations() async {
-    Position currentPosition = await _geolocService.localizeUser();
-    _listStations = await _api.fetchStations(
-        currentPosition.latitude, currentPosition.longitude);
-    _listStationsMarkers = _listStations.map((station) {
+    _listStationInfo = await _api.fetchInfo();
+    _listStationsMarkers = _listStationInfo.map((station) {
       return Marker(
         width: 10.0,
         height: 10.0,
@@ -52,6 +49,12 @@ class MapViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void localizeUser() async {
+    Position currentPosition = await _geolocService.localizeUser();
+    _userPosition = LatLng(currentPosition.latitude, currentPosition.longitude);
+    notifyListeners();
+  }
+
   void localizeUserLive() async {
     geolocator.getPositionStream(locationOptions).listen((Position position) {
       if (position != null) {
@@ -65,7 +68,7 @@ class MapViewModel extends ChangeNotifier {
   void toSearchPage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SearchScreen()),
+      MaterialPageRoute(builder: (context) => DepartureScreen()),
     );
     notifyListeners();
   }

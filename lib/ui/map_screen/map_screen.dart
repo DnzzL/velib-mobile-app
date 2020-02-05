@@ -62,10 +62,6 @@ class MapScreen extends StatelessWidget {
                 backgroundColor: Colors.red,
                 label: "Arrival",
                 onTap: () => model.toArrivalPage(context)),
-            SpeedDialChild(
-                child: Icon(Icons.search),
-                label: "Search",
-                onTap: () => model.toSearchPage(context)),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
