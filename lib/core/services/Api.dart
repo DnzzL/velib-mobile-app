@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 import 'package:velibetter/core/models/StationInfo.dart';
 import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';

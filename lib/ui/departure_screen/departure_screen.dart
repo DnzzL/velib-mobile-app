@@ -1,3 +1,4 @@
+import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider_architecture/provider_architecture.dart';
@@ -29,18 +30,7 @@ class DepartureScreen extends StatelessWidget {
                                       color: Color.fromRGBO(64, 75, 96, .9)),
                                   child: ListTile(
                                     contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 10.0),
-                                    leading: Container(
-                                      padding: EdgeInsets.only(
-                                          right: 12.0, top: 8.0),
-                                      decoration: new BoxDecoration(
-                                          border: new Border(
-                                              right: new BorderSide(
-                                                  width: 1.0,
-                                                  color: Colors.white24))),
-                                      child: Icon(Icons.store,
-                                          color: Colors.white),
-                                    ),
+                                        horizontal: 25.0, vertical: 10.0),
                                     title: Text(
                                       '${model.listStationNameSortedByDistance[index]}',
                                       style: TextStyle(
@@ -51,7 +41,7 @@ class DepartureScreen extends StatelessWidget {
                                     subtitle: Row(
                                       children: <Widget>[
                                         Icon(
-                                          Icons.settings,
+                                          CommunityMaterialIcons.bike,
                                           color: model.getAvailabilityColor(
                                               index, "mechanical"),
                                           size: 18,

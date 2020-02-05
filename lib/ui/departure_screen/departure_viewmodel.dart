@@ -6,6 +6,7 @@ import 'package:velibetter/core/models/StationInfo.dart';
 import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
+import 'package:velibetter/core/services/RouteService.dart';
 
 class DepartureViewModel extends ChangeNotifier {
   Api _api = Api();

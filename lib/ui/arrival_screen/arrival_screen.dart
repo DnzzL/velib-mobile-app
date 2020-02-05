@@ -1,3 +1,4 @@
+import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider_architecture/provider_architecture.dart';
@@ -38,8 +39,9 @@ class ArrivalScreen extends StatelessWidget {
                                             right: new BorderSide(
                                                 width: 1.0,
                                                 color: Colors.white24))),
-                                    child:
-                                        Icon(Icons.store, color: Colors.white),
+                                    child: Icon(
+                                        CommunityMaterialIcons.garage_open,
+                                        color: Colors.white),
                                   ),
                                   title: Text(
                                     '${model.listStationNameSortedByDistance[index]}',
