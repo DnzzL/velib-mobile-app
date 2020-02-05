@@ -42,7 +42,7 @@ class ArrivalScreen extends StatelessWidget {
                                         Icon(Icons.store, color: Colors.white),
                                   ),
                                   title: Text(
-                                    '${model.listStations[index].stationId}',
+                                    '${model.listStationNameSortedByDistance[index]}',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
