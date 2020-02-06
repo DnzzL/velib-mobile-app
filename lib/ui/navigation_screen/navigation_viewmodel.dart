@@ -2,6 +2,7 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/foundation.dart' as navigation_viewmodel;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geojson/geojson.dart';
 import 'package:latlong/latlong.dart';
 import 'package:velibetter/core/models/NavigationStep.dart';
 import 'package:velibetter/core/services/RouteService.dart';
@@ -12,6 +13,7 @@ class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
   RouteService _routeService = RouteService();
   final LatLng departure;
   final LatLng arrival;
+  GeoJsonFeatureCollection _route;
   List<NavigationStep> _steps;
   MapController mapController = MapController();
 
@@ -19,10 +21,19 @@ class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
 
   List<NavigationStep> get steps => _steps;
 
-  void getSteps() async {
-    final route = await _routeService.fetchOpenRoute(departure.latitude,
+  void fetchRoute() async {
+    _route = await _routeService.fetchOpenRoute(departure.latitude,
         departure.longitude, arrival.latitude, arrival.longitude);
-    _steps = _routeService.getSteps(route);
+    notifyListeners();
+  }
+
+  void getSteps() async {
+    _steps = _routeService.getSteps(_route);
+    notifyListeners();
+  }
+
+  void getSummary() async {
+    _steps = _routeService.getSteps(_route);
     notifyListeners();
   }
 

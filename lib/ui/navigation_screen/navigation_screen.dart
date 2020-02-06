@@ -20,13 +20,16 @@ class NavigationScreen extends StatelessWidget {
       viewModel:
           NavigationViewModel(departure: this.departure, arrival: this.arrival),
       onModelReady: (model) {
+        model.fetchRoute();
         model.getSteps();
+        model.getSummary();
       },
       builder: (context, model, child) => Scaffold(
         body: Column(
           children: <Widget>[
             Container(
               constraints: BoxConstraints.tightForFinite(height: 250),
+              margin: EdgeInsets.all(0),
               child: FlutterMap(
                 mapController: model.mapController,
                 options: new MapOptions(
