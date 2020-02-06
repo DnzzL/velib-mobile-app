@@ -1,71 +1,49 @@
+import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/foundation.dart' as navigation_viewmodel;
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geojson/geojson.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:velibetter/core/models/StationInfo.dart';
-import 'package:velibetter/core/services/Api.dart';
-import 'package:velibetter/core/services/Geoloc.dart';
+import 'package:velibetter/core/models/NavigationStep.dart';
 import 'package:velibetter/core/services/RouteService.dart';
 import 'package:velibetter/ui/arrival_screen/arrival_screen.dart';
 import 'package:velibetter/ui/departure_screen/departure_screen.dart';
 
-class MapViewModel extends navigation_viewmodel.ChangeNotifier {
-  Api _api = Api();
-  Geoloc _geolocService = Geoloc();
-  LatLng _userPosition;
-  List<StationInfo> _listStationInfo;
-  List<Marker> _listStationsMarkers;
-
-  var geolocator = Geolocator();
-  var locationOptions =
-      LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-
+class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
+  RouteService _routeService = RouteService();
+  final LatLng departure;
+  final LatLng arrival;
+  List<NavigationStep> _steps;
   MapController mapController = MapController();
 
-  LatLng get userPosition => _userPosition;
+  NavigationViewModel({@required this.departure, @required this.arrival});
 
-  List<StationInfo> get listStations => _listStationInfo;
+  List<NavigationStep> get steps => _steps;
 
-  List<Marker> get listStationsMarkers => _listStationsMarkers;
-
-  void fetchStations() async {
-    _listStationInfo = await _api.fetchInfo();
-    _listStationsMarkers = _listStationInfo.map((station) {
-      return Marker(
-        width: 10.0,
-        height: 10.0,
-        point: LatLng(station.lat, station.lon),
-        builder: (ctx) => new Container(
-            child: Opacity(
-          opacity: 0.8,
-          child: Icon(
-            Icons.location_on,
-            size: 20,
-            color: Colors.redAccent,
-          ),
-        )),
-      );
-    }).toList();
+  void getSteps() async {
+    final route = await _routeService.fetchOpenRoute(departure.latitude,
+        departure.longitude, arrival.latitude, arrival.longitude);
+    _steps = _routeService.getSteps(route);
     notifyListeners();
   }
 
-  void localizeUser() async {
-    Position currentPosition = await _geolocService.localizeUser();
-    _userPosition = LatLng(currentPosition.latitude, currentPosition.longitude);
-    notifyListeners();
-  }
-
-  void localizeUserLive() async {
-    geolocator.getPositionStream(locationOptions).listen((Position position) {
-      if (position != null) {
-        _userPosition = LatLng(position.latitude, position.longitude);
-        mapController.move(_userPosition, 14.0);
-        notifyListeners();
-      }
-    });
+  IconData getNavigationIcon(int type) {
+    print(type);
+    switch (type) {
+      case 0:
+        return CommunityMaterialIcons.arrow_left_bold;
+      case 1:
+        return CommunityMaterialIcons.arrow_right_bold;
+      case 2:
+        return CommunityMaterialIcons.arrow_bottom_left_bold_outline;
+      case 5:
+        return CommunityMaterialIcons.arrow_right;
+      case 10:
+        return CommunityMaterialIcons.flag_checkered;
+      case 11:
+        return CommunityMaterialIcons.compass;
+      default:
+        return CommunityMaterialIcons.navigation;
+    }
   }
 
   void toSearchPage(BuildContext context) {

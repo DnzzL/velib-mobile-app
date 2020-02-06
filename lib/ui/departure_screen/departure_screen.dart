@@ -24,13 +24,14 @@ class DepartureScreen extends StatelessWidget {
                               return Card(
                                 elevation: 8.0,
                                 margin: new EdgeInsets.symmetric(
-                                    horizontal: 10.0, vertical: 6.0),
+                                    horizontal: 0.0, vertical: 1.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      color: Color.fromRGBO(64, 75, 96, .9)),
+                                    color: Color.fromRGBO(64, 75, 96, .9),
+                                  ),
                                   child: ListTile(
                                     contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 25.0, vertical: 10.0),
+                                        horizontal: 20.0, vertical: 10.0),
                                     title: Text(
                                       '${model.listStationNameSortedByDistance[index]}',
                                       style: TextStyle(
@@ -38,40 +39,89 @@ class DepartureScreen extends StatelessWidget {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                                    subtitle: Row(
+                                    subtitle: Column(
                                       children: <Widget>[
-                                        Icon(
-                                          CommunityMaterialIcons.bike,
-                                          color: model.getAvailabilityColor(
-                                              index, "mechanical"),
-                                          size: 18,
+                                        Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 10.0),
+                                                  child: Text("mechanical",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.white))),
+                                            ),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Container(
+                                                  // tag: 'hero',
+                                                  child: LinearProgressIndicator(
+                                                      backgroundColor:
+                                                          Color.fromRGBO(
+                                                              209, 224, 224, 0.2),
+                                                      value: model.getAvailability(
+                                                          index, "mechanical"),
+                                                      semanticsLabel: model
+                                                          .listStationsWithBikes[
+                                                              index]
+                                                          .numBikesAvailableTypes
+                                                          .mechanical
+                                                          .toString(),
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              model.getAvailabilityColor(
+                                                                  index,
+                                                                  "mechanical"))),
+                                                )),
+                                          ],
                                         ),
-                                        Text(
-                                            model.listStationStatus != null
-                                                ? ' Mechanical: ${model.listStationsWithBikes[index].numBikesAvailableTypes.mechanical}'
-                                                : ' 0',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        Container(
-                                          padding: EdgeInsets.all(10),
-                                        ),
-                                        Icon(
-                                          Icons.flash_on,
-                                          color: model.getAvailabilityColor(
-                                              index, "ebike"),
-                                          size: 18,
-                                        ),
-                                        Text(
-                                            model.listStationStatus != null
-                                                ? ' Ebike: ${model.listStationsWithBikes[index].numBikesAvailableTypes.ebike}'
-                                                : '0',
-                                            style:
-                                                TextStyle(color: Colors.white))
+                                        Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 10.0),
+                                                  child: Text("ebike",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.white))),
+                                            ),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Container(
+                                                  // tag: 'hero',
+                                                  child: LinearProgressIndicator(
+                                                      backgroundColor:
+                                                          Color.fromRGBO(
+                                                              209, 224, 224, 0.2),
+                                                      value:
+                                                          model.getAvailability(
+                                                              index, "ebike"),
+                                                      semanticsLabel: model
+                                                          .listStationsWithBikes[
+                                                              index]
+                                                          .numBikesAvailableTypes
+                                                          .ebike
+                                                          .toString(),
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              model.getAvailabilityColor(
+                                                                  index,
+                                                                  "ebike"))),
+                                                )),
+                                          ],
+                                        )
                                       ],
                                     ),
                                     trailing: Icon(Icons.keyboard_arrow_right,
                                         color: Colors.white, size: 30.0),
-                                    onTap: () => print("nav"),
+                                    onTap: () => model.toNavigationPage(
+                                        context,
+                                        model.listStationsWithBikes[index]
+                                            .stationId),
                                   ),
                                 ),
                               );

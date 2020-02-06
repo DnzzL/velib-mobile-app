@@ -1,19 +1,19 @@
-class Step {
+class NavigationStep {
   num distance, duration, type;
   String instruction, name;
   List<int> wayPoints;
 
-  Step(this.distance, this.duration, this.type, this.instruction, this.name,
-      this.wayPoints);
+  NavigationStep(this.distance, this.duration, this.type, this.instruction,
+      this.name, this.wayPoints);
 
-  factory Step.fromJson(List<dynamic> json) {
-    return Step(
-      double.parse(json["distance"]),
+  factory NavigationStep.fromJson(Map<String, dynamic> json) {
+    return NavigationStep(
+      json["distance"],
       json["duration"],
       json["type"],
       json["instruction"],
       json["name"],
-      json["way_points"],
+      json["way_points"].cast<int>(),
     );
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geojson/geojson.dart';
+import 'package:velibetter/core/models/NavigationStep.dart';
 
 class RouteService {
   DefaultCacheManager cacheManager = DefaultCacheManager();
 
-  Future<GeoJsonFeatureCollection> getNavigation(
+  Future<GeoJsonFeatureCollection> fetchOpenRoute(
       double latA, double lonA, double latB, double lonB) async {
     await DotEnv().load('.env');
     var url =
@@ -20,8 +21,11 @@ class RouteService {
     }
   }
 
-  List<Map<String, int>> getSteps(GeoJsonFeatureCollection collection) {
-    return collection.collection[0].properties["segments"]["steps"];
+  List<NavigationStep> getSteps(GeoJsonFeatureCollection collection) {
+    return List<NavigationStep>.from(collection
+        .collection[0].properties["segments"][0]["steps"]
+        .map((e) => NavigationStep.fromJson(e))
+        .toList());
   }
 
   Map<String, int> getSummary(GeoJsonFeatureCollection collection) {

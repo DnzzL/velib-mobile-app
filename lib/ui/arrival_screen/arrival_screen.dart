@@ -24,25 +24,13 @@ class ArrivalScreen extends StatelessWidget {
                             return Card(
                               elevation: 8.0,
                               margin: new EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 6.0),
+                                  horizontal: 0.0, vertical: 1.0),
                               child: Container(
                                 decoration: BoxDecoration(
                                     color: Color.fromRGBO(64, 75, 96, .9)),
                                 child: ListTile(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20.0, vertical: 10.0),
-                                  leading: Container(
-                                    padding:
-                                        EdgeInsets.only(right: 12.0, top: 8.0),
-                                    decoration: new BoxDecoration(
-                                        border: new Border(
-                                            right: new BorderSide(
-                                                width: 1.0,
-                                                color: Colors.white24))),
-                                    child: Icon(
-                                        CommunityMaterialIcons.garage_open,
-                                        color: Colors.white),
-                                  ),
                                   title: Text(
                                     '${model.listStationNameSortedByDistance[index]}',
                                     style: TextStyle(
@@ -52,23 +40,39 @@ class ArrivalScreen extends StatelessWidget {
                                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                                   subtitle: Row(
                                     children: <Widget>[
-                                      Icon(
-                                        Icons.equalizer,
-                                        color:
-                                            model.getAvailabilityColor(index),
-                                        size: 18,
+                                      Expanded(
+                                        flex: 1,
+                                        child: Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 10.0),
+                                            child: Text("docks",
+                                                style: TextStyle(
+                                                    color: Colors.white))),
                                       ),
-                                      Text(
-                                          model.listStations != null
-                                              ? ' Docks available: ${model.listStationsWithBikes[index].numDocksAvailable}'
-                                              : ' 0',
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            // tag: 'hero',
+                                            child: LinearProgressIndicator(
+                                                backgroundColor: Color.fromRGBO(
+                                                    209, 224, 224, 0.2),
+                                                value: model
+                                                    .getAvailability(index)
+                                                    .toDouble(),
+                                                valueColor:
+                                                    AlwaysStoppedAnimation(model
+                                                        .getAvailabilityColor(
+                                                            index))),
+                                          )),
                                     ],
                                   ),
+
                                   trailing: Icon(Icons.keyboard_arrow_right,
                                       color: Colors.white, size: 30.0),
-                                  onTap: () => print("nav"),
+                                  onTap: () => model.toNavigationPage(
+                                      context,
+                                      model.listStationsWithDocks[index]
+                                          .stationId),
                                 ),
                               ),
                             );
