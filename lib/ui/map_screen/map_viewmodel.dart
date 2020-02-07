@@ -1,52 +1,52 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geojson/geojson.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:velibetter/core/models/StationInfo.dart';
+import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
-import 'package:velibetter/core/services/RouteService.dart';
 import 'package:velibetter/ui/arrival_screen/arrival_screen.dart';
 import 'package:velibetter/ui/departure_screen/departure_screen.dart';
+import 'package:velibetter/ui/detail_screen/detail_screen.dart';
 
 class MapViewModel extends ChangeNotifier {
   Api _api = Api();
   Geoloc _geolocService = Geoloc();
   LatLng _userPosition;
-  List<StationInfo> _listStationInfo;
+  List<StationInfo> listStationInfo;
+  List<StationStatus> listStationStatus;
   List<Marker> _listStationsMarkers;
-
-  var geolocator = Geolocator();
-  var locationOptions =
-      LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
   MapController mapController = MapController();
 
   LatLng get userPosition => _userPosition;
 
-  List<StationInfo> get listStations => _listStationInfo;
-
   List<Marker> get listStationsMarkers => _listStationsMarkers;
 
-  void fetchStations() async {
-    _listStationInfo = await _api.fetchInfo();
-    _listStationsMarkers = _listStationInfo.map((station) {
+  void getStationMarkers(BuildContext context) async {
+    listStationInfo = await _api.fetchInfo();
+    listStationStatus = await _api.fetchStatus();
+    _listStationsMarkers = listStationInfo.map((stationInfo) {
+      var stationIndex = listStationInfo.indexOf(stationInfo);
       return Marker(
-        width: 10.0,
-        height: 10.0,
-        point: LatLng(station.lat, station.lon),
-        builder: (ctx) => new Container(
-            child: Opacity(
-          opacity: 0.8,
-          child: Icon(
-            Icons.location_on,
-            size: 20,
-            color: Colors.redAccent,
-          ),
-        )),
+        width: 30.0,
+        height: 30.0,
+        point: LatLng(stationInfo.lat, stationInfo.lon),
+        builder: (ctx) => Container(
+            child: GestureDetector(
+                onTap: () => toDetailPage(
+                    context, stationIndex, listStationInfo, listStationStatus),
+                child: new Container(
+                    child: Opacity(
+                  opacity: 0.8,
+                  child: Icon(
+                    Icons.location_on,
+                    size: 20,
+                    color: Colors.redAccent,
+                  ),
+                )))),
       );
     }).toList();
     notifyListeners();
@@ -59,6 +59,9 @@ class MapViewModel extends ChangeNotifier {
   }
 
   void localizeUserLive() async {
+    var geolocator = Geolocator();
+    var locationOptions =
+        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
     geolocator.getPositionStream(locationOptions).listen((Position position) {
       if (position != null) {
         _userPosition = LatLng(position.latitude, position.longitude);
@@ -68,26 +71,44 @@ class MapViewModel extends ChangeNotifier {
     });
   }
 
-  void toSearchPage(BuildContext context) {
+  void toDeparturePage(BuildContext context) async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => DepartureScreen()),
+      MaterialPageRoute(
+          builder: (context) => DepartureScreen(
+                listStationInfo: listStationInfo,
+                listStationStatus: listStationStatus,
+              )),
     );
     notifyListeners();
   }
 
-  void toDeparturePage(BuildContext context) {
+  void toArrivalPage(BuildContext context, List<StationInfo> listStationInfo,
+      List<StationStatus> listStationStatus) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => DepartureScreen()),
+      MaterialPageRoute(
+          builder: (context) => ArrivalScreen(
+                listStationInfo: listStationInfo,
+                listStationStatus: listStationStatus,
+              )),
     );
     notifyListeners();
   }
 
-  void toArrivalPage(BuildContext context) {
+  void toDetailPage(
+      BuildContext context,
+      int stationIndex,
+      List<StationInfo> listStationInfo,
+      List<StationStatus> listStationStatus) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ArrivalScreen()),
+      MaterialPageRoute(
+          builder: (context) => DetailScreen(
+                stationIndex: stationIndex,
+                listStationInfo: listStationInfo,
+                listStationStatus: listStationStatus,
+              )),
     );
     notifyListeners();
   }

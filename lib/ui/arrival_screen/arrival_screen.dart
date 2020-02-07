@@ -1,21 +1,33 @@
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider_architecture/provider_architecture.dart';
+import 'package:velibetter/core/models/StationInfo.dart';
+import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:velibetter/ui/arrival_screen/arrival_viewmodel.dart';
 
 // Since the state was moved to the view model, this is now a StatelessWidget.
 class ArrivalScreen extends StatelessWidget {
+  final List<StationInfo> listStationInfo;
+  final List<StationStatus> listStationStatus;
+
+  ArrivalScreen(
+      {Key key,
+      @required this.listStationInfo,
+      @required this.listStationStatus})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // ViewModelProvider is what provides the view model to the widget tree.
     return ViewModelProvider<ArrivalViewModel>.withConsumer(
-        viewModel: ArrivalViewModel(),
+        viewModel: ArrivalViewModel(
+            listStationInfo: listStationInfo,
+            listStationStatus: listStationStatus),
         onModelReady: (model) => model.getClosestStationsWithDocks(),
         builder: (context, model, child) => Scaffold(
               body: Container(
                 child: Container(
-                  child: model.listStations != null
+                  child: model.listStationNameSortedByDistance != null
                       ? ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -50,20 +62,26 @@ class ArrivalScreen extends StatelessWidget {
                                                     color: Colors.white))),
                                       ),
                                       Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            // tag: 'hero',
-                                            child: LinearProgressIndicator(
-                                                backgroundColor: Color.fromRGBO(
-                                                    209, 224, 224, 0.2),
-                                                value: model
-                                                    .getAvailability(index)
-                                                    .toDouble(),
-                                                valueColor:
-                                                    AlwaysStoppedAnimation(model
-                                                        .getAvailabilityColor(
-                                                            index))),
-                                          )),
+                                          child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          LinearProgressIndicator(
+                                              backgroundColor: Color.fromRGBO(
+                                                  209, 224, 224, 0.2),
+                                              value: model
+                                                  .getAvailability(index)
+                                                  .toDouble(),
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(model
+                                                      .getAvailabilityColor(
+                                                          index))),
+                                          Text(
+                                              '${model.listStationStatus[index].numDocksAvailable}',
+                                              style: TextStyle(
+                                                  color: Colors.white))
+                                        ],
+                                      )),
                                     ],
                                   ),
 

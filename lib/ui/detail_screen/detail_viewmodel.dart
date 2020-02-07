@@ -1,21 +1,37 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:velibetter/core/models/StationInfo.dart';
 import 'package:velibetter/core/models/StationStatus.dart';
+import 'package:velibetter/ui/navigation_screen/navigation_screen.dart';
 
 class DetailViewModel extends ChangeNotifier {
   LatLng _userPosition;
-  StationInfo stationInfo;
-  StationStatus stationStatus;
+  int stationIndex;
+  List<StationInfo> listStationInfo;
+  List<StationStatus> listStationStatus;
 
-  DetailViewModel({@required this.stationInfo, @required this.stationStatus});
+  DetailViewModel(
+      {@required this.stationIndex,
+      @required this.listStationInfo,
+      @required this.listStationStatus});
 
   var geolocator = Geolocator();
   var locationOptions =
       LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
   LatLng get userPosition => _userPosition;
+
+  void toNavigationPage(BuildContext context, StationInfo stationInfo) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => NavigationScreen(
+                departure: _userPosition,
+                arrival: LatLng(stationInfo.lat, stationInfo.lon),
+              )),
+    );
+    notifyListeners();
+  }
 }

@@ -14,7 +14,7 @@ class MapScreen extends StatelessWidget {
       viewModel: MapViewModel(),
       onModelReady: (model) {
         model.localizeUserLive();
-        model.fetchStations();
+        model.getStationMarkers(context);
       },
       builder: (context, model, child) => Scaffold(
         body: FlutterMap(
@@ -61,7 +61,8 @@ class MapScreen extends StatelessWidget {
                 child: Icon(Icons.build),
                 backgroundColor: Colors.red,
                 label: "Arrival",
-                onTap: () => model.toArrivalPage(context)),
+                onTap: () => model.toArrivalPage(
+                    context, model.listStationInfo, model.listStationStatus)),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

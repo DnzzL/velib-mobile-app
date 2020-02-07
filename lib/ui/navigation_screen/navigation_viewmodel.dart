@@ -11,8 +11,8 @@ import 'package:velibetter/ui/departure_screen/departure_screen.dart';
 
 class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
   RouteService _routeService = RouteService();
-  final LatLng departure;
-  final LatLng arrival;
+  LatLng departure;
+  LatLng arrival;
   GeoJsonFeatureCollection _route;
   List<NavigationStep> _steps;
   MapController mapController = MapController();
@@ -55,14 +55,6 @@ class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
       default:
         return CommunityMaterialIcons.navigation;
     }
-  }
-
-  void toSearchPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => DepartureScreen()),
-    );
-    notifyListeners();
   }
 
   void toDeparturePage(BuildContext context) {
