@@ -21,24 +21,21 @@ class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
 
   List<NavigationStep> get steps => _steps;
 
-  void fetchRoute() async {
+  void getSteps() async {
     _route = await _routeService.fetchOpenRoute(departure.latitude,
         departure.longitude, arrival.latitude, arrival.longitude);
-    notifyListeners();
-  }
-
-  void getSteps() async {
     _steps = _routeService.getSteps(_route);
     notifyListeners();
   }
 
   void getSummary() async {
+    _route = await _routeService.fetchOpenRoute(departure.latitude,
+        departure.longitude, arrival.latitude, arrival.longitude);
     _steps = _routeService.getSteps(_route);
     notifyListeners();
   }
 
   IconData getNavigationIcon(int type) {
-    print(type);
     switch (type) {
       case 0:
         return CommunityMaterialIcons.arrow_left_bold;

@@ -20,7 +20,6 @@ class NavigationScreen extends StatelessWidget {
       viewModel:
           NavigationViewModel(departure: this.departure, arrival: this.arrival),
       onModelReady: (model) {
-        model.fetchRoute();
         model.getSteps();
         model.getSummary();
       },
@@ -28,6 +27,7 @@ class NavigationScreen extends StatelessWidget {
         body: Column(
           children: <Widget>[
             Container(
+              color: Color.fromRGBO(64, 75, 96, .9),
               constraints: BoxConstraints.tightForFinite(height: 250),
               margin: EdgeInsets.all(0),
               child: FlutterMap(
