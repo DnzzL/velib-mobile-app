@@ -6,11 +6,12 @@ import 'package:velibetter/core/models/NavigationStep.dart';
 class RouteService {
   DefaultCacheManager cacheManager = DefaultCacheManager();
 
-  Future<GeoJsonFeatureCollection> fetchOpenRoute(
-      double latA, double lonA, double latB, double lonB) async {
+  Future<GeoJsonFeatureCollection> fetchOpenRoute(double latA, double lonA,
+      double latB, double lonB) async {
     await DotEnv().load('.env');
     var url =
-        'https://api.openrouteservice.org/v2/directions/foot-walking?api_key=${DotEnv().env['OPENROUTE_TOKEN']}&start=$lonA,$latA&end=$lonB,$latB';
+        'https://api.openrouteservice.org/v2/directions/foot-walking?api_key=${DotEnv()
+        .env['OPENROUTE_TOKEN']}&start=$lonA,$latA&end=$lonB,$latB';
     try {
       var file = await cacheManager.getSingleFile(url);
       var response = file.readAsStringSync();
@@ -26,6 +27,10 @@ class RouteService {
         .collection[0].properties["segments"][0]["steps"]
         .map((e) => NavigationStep.fromJson(e))
         .toList());
+  }
+
+  List<List<double>> getGeometry(GeoJsonFeatureCollection collection) {
+    return collection.collection[0].geometry["coordinates"];
   }
 
   Map<String, int> getSummary(GeoJsonFeatureCollection collection) {

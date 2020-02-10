@@ -60,16 +60,21 @@ class ArrivalViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  num getAvailability(int index) {
-    return listStationStatus[index].numDocksAvailable;
+  double getAvailability(int index) {
+    var stationInfo = listStationInfo
+        .where((stationInfo) =>
+            stationInfo.stationId == _listStationsWithDocks[index].stationId)
+        .toList()[0];
+    return _listStationsWithDocks[index].numDocksAvailable /
+        stationInfo.capacity;
   }
 
   Color getAvailabilityColor(int index) {
     var availability = getAvailability(index);
-    if (availability < 5) {
+    if (availability < 0.2) {
       return Colors.red;
     }
-    if (availability > 10) {
+    if (availability > 0.5) {
       return Colors.lightGreenAccent;
     }
     return Colors.orangeAccent;

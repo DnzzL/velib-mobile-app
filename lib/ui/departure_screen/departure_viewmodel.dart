@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:velibetter/core/models/StationInfo.dart';
 import 'package:velibetter/core/models/StationStatus.dart';
-import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
 import 'package:velibetter/ui/navigation_screen/navigation_screen.dart';
 
@@ -16,7 +15,6 @@ class DepartureViewModel extends ChangeNotifier {
       {@required this.listStationInfo, @required this.listStationStatus});
 
   Geoloc _geolocService = Geoloc();
-  Api _api = Api();
   List<StationStatus> _listStationsWithBikes;
   List<String> _listStationNameSortedByDistance;
   LatLng _userPosition;
@@ -45,8 +43,6 @@ class DepartureViewModel extends ChangeNotifier {
   }
 
   void getClosestStationsWithBikes() async {
-    listStationStatus = await _api.fetchStatus();
-    listStationInfo = await _api.fetchInfo();
     _listStationsWithBikes = listStationStatus
         .where((stationStatus) => stationStatus.numBikesAvailable > 0)
         .toList();
@@ -65,16 +61,20 @@ class DepartureViewModel extends ChangeNotifier {
   }
 
   double getAvailability(int index, String type) {
+    var stationInfo = listStationInfo
+        .where((stationInfo) =>
+            stationInfo.stationId == _listStationsWithBikes[index].stationId)
+        .toList()[0];
     return type == "mechanical"
-        ? listStationStatus[index].numBikesAvailableTypes.mechanical /
-            listStationInfo[index].capacity
-        : listStationStatus[index].numBikesAvailableTypes.ebike /
-            listStationInfo[index].capacity;
+        ? _listStationsWithBikes[index].numBikesAvailableTypes.mechanical /
+            stationInfo.capacity
+        : _listStationsWithBikes[index].numBikesAvailableTypes.ebike /
+            stationInfo.capacity;
   }
 
   Color getAvailabilityColor(int index, String type) {
     var availability = getAvailability(index, type);
-    if (availability < 0.1) {
+    if (availability < 0.2) {
       return Colors.red;
     }
     if (availability > 0.5) {

@@ -106,6 +106,7 @@ class MapViewModel extends ChangeNotifier {
       MaterialPageRoute(
           builder: (context) => DetailScreen(
                 stationIndex: stationIndex,
+                userPosition: userPosition,
                 listStationInfo: listStationInfo,
                 listStationStatus: listStationStatus,
               )),

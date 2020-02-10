@@ -27,7 +27,7 @@ class DepartureScreen extends StatelessWidget {
         builder: (context, model, child) => Scaffold(
               body: Container(
                 child: Container(
-                    child: model.listStationStatus != null
+                    child: model.listStationsWithBikes != null &&  model.listStationNameSortedByDistance != null
                         ? ListView.builder(
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
@@ -60,7 +60,7 @@ class DepartureScreen extends StatelessWidget {
                                               child: Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 10.0),
-                                                  child: Text("mechanical",
+                                                  child: Text("${model.listStationsWithBikes[index].numBikesAvailableTypes.mechanical} mechanical",
                                                       style: TextStyle(
                                                           color:
                                                               Colors.white))),
@@ -96,7 +96,7 @@ class DepartureScreen extends StatelessWidget {
                                               child: Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 10.0),
-                                                  child: Text("ebike",
+                                                  child: Text("${model.listStationsWithBikes[index].numBikesAvailableTypes.ebike} ebike",
                                                       style: TextStyle(
                                                           color:
                                                               Colors.white))),

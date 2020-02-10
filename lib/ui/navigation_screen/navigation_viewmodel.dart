@@ -15,16 +15,29 @@ class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
   LatLng arrival;
   GeoJsonFeatureCollection _route;
   List<NavigationStep> _steps;
+  List<LatLng> _points;
   MapController mapController = MapController();
 
   NavigationViewModel({@required this.departure, @required this.arrival});
 
   List<NavigationStep> get steps => _steps;
 
+  List<LatLng> get points => _points;
+
   void getSteps() async {
     _route = await _routeService.fetchOpenRoute(departure.latitude,
         departure.longitude, arrival.latitude, arrival.longitude);
     _steps = _routeService.getSteps(_route);
+    notifyListeners();
+  }
+
+  void getTrace() async {
+    _route = await _routeService.fetchOpenRoute(departure.latitude,
+        departure.longitude, arrival.latitude, arrival.longitude);
+    var geometry = _routeService.getGeometry(_route);
+    print(geometry);
+    _points = geometry.map((geom) => LatLng(geom[0], geom[1])).toList();
+    print(_points);
     notifyListeners();
   }
 

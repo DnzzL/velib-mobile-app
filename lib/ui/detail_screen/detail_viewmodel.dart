@@ -7,13 +7,14 @@ import 'package:velibetter/core/models/StationStatus.dart';
 import 'package:velibetter/ui/navigation_screen/navigation_screen.dart';
 
 class DetailViewModel extends ChangeNotifier {
-  LatLng _userPosition;
+  LatLng userPosition;
   int stationIndex;
   List<StationInfo> listStationInfo;
   List<StationStatus> listStationStatus;
 
   DetailViewModel(
       {@required this.stationIndex,
+      @required this.userPosition,
       @required this.listStationInfo,
       @required this.listStationStatus});
 
@@ -21,14 +22,12 @@ class DetailViewModel extends ChangeNotifier {
   var locationOptions =
       LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
-  LatLng get userPosition => _userPosition;
-
   void toNavigationPage(BuildContext context, StationInfo stationInfo) {
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => NavigationScreen(
-                departure: _userPosition,
+                departure: userPosition,
                 arrival: LatLng(stationInfo.lat, stationInfo.lon),
               )),
     );

@@ -57,31 +57,20 @@ class ArrivalScreen extends StatelessWidget {
                                         child: Padding(
                                             padding:
                                                 EdgeInsets.only(left: 10.0),
-                                            child: Text("docks",
+                                            child: Text(
+                                                "${model.listStationStatus[index].numDocksAvailable} docks",
                                                 style: TextStyle(
                                                     color: Colors.white))),
                                       ),
                                       Expanded(
-                                          child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          LinearProgressIndicator(
-                                              backgroundColor: Color.fromRGBO(
-                                                  209, 224, 224, 0.2),
-                                              value: model
-                                                  .getAvailability(index)
-                                                  .toDouble(),
-                                              valueColor:
-                                                  AlwaysStoppedAnimation(model
-                                                      .getAvailabilityColor(
-                                                          index))),
-                                          Text(
-                                              '${model.listStationStatus[index].numDocksAvailable}',
-                                              style: TextStyle(
-                                                  color: Colors.white))
-                                        ],
-                                      )),
+                                        child: LinearProgressIndicator(
+                                            backgroundColor: Color.fromRGBO(
+                                                209, 224, 224, 0.2),
+                                            value: model.getAvailability(index),
+                                            valueColor: AlwaysStoppedAnimation(
+                                                model.getAvailabilityColor(
+                                                    index))),
+                                      ),
                                     ],
                                   ),
 

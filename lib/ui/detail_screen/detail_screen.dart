@@ -1,5 +1,6 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:velibetter/core/models/StationInfo.dart';
 import 'package:velibetter/core/models/StationStatus.dart';
@@ -8,12 +9,14 @@ import 'package:velibetter/ui/detail_screen/detail_viewmodel.dart';
 // Since the state was moved to the view model, this is now a StatelessWidget.
 class DetailScreen extends StatelessWidget {
   int stationIndex;
+  LatLng userPosition;
   List<StationInfo> listStationInfo;
   List<StationStatus> listStationStatus;
 
   DetailScreen(
       {Key key,
       @required this.stationIndex,
+      @required this.userPosition,
       @required this.listStationInfo,
       @required this.listStationStatus})
       : super(key: key);
@@ -24,6 +27,7 @@ class DetailScreen extends StatelessWidget {
     return ViewModelProvider<DetailViewModel>.withConsumer(
       viewModel: DetailViewModel(
           stationIndex: this.stationIndex,
+          userPosition: userPosition,
           listStationInfo: this.listStationInfo,
           listStationStatus: this.listStationStatus),
       onModelReady: (model) {},
@@ -287,7 +291,7 @@ class DetailScreen extends StatelessWidget {
                       width: 15,
                     ),
                     Text(
-                        '${model.listStationStatus[model.stationIndex].numDocksAvailable} docks')
+                        '${model.listStationStatus[model.stationIndex].numDocksAvailable - model.listStationStatus[model.stationIndex].numBikesAvailable} docks')
                   ],
                 ),
                 SizedBox(

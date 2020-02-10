@@ -54,7 +54,7 @@ class MapScreen extends StatelessWidget {
           children: [
             SpeedDialChild(
                 child: Icon(Icons.directions_bike),
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.blueAccent,
                 label: "Departure",
                 onTap: () => model.toDeparturePage(context)),
             SpeedDialChild(
