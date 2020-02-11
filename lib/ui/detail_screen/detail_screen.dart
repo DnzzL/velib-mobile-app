@@ -291,7 +291,7 @@ class DetailScreen extends StatelessWidget {
                       width: 15,
                     ),
                     Text(
-                        '${model.listStationStatus[model.stationIndex].numDocksAvailable - model.listStationStatus[model.stationIndex].numBikesAvailable} docks')
+                        '${model.listStationStatus[model.stationIndex].numDocksAvailable} docks')
                   ],
                 ),
                 SizedBox(
