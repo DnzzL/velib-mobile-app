@@ -4,22 +4,22 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:velibetter/core/models/StationInfo.dart';
 import 'package:velibetter/core/models/StationStatus.dart';
-import 'package:velibetter/core/services/Api.dart';
 import 'package:velibetter/core/services/Geoloc.dart';
+import 'package:velibetter/ui/navigation_screen/navigation_screen.dart';
 
 class DepartureViewModel extends ChangeNotifier {
-  Api _api = Api();
+  List<StationInfo> listStationInfo;
+  List<StationStatus> listStationStatus;
+
+  DepartureViewModel(
+      {@required this.listStationInfo, @required this.listStationStatus});
+
   Geoloc _geolocService = Geoloc();
-  List<StationStatus> _listStationStatus;
-  List<StationInfo> _listStationInfo;
   List<StationStatus> _listStationsWithBikes;
   List<String> _listStationNameSortedByDistance;
-  List<StationStatus> _filteredStations;
+  LatLng _userPosition;
   TextEditingController _editingController = TextEditingController();
-
-  List<StationStatus> get listStationStatus => _listStationStatus;
-
-  List<StationInfo> get listStationInfo => _listStationInfo;
+  List<int> _distances;
 
   List<StationStatus> get listStationsWithBikes => _listStationsWithBikes;
 
@@ -28,33 +28,35 @@ class DepartureViewModel extends ChangeNotifier {
 
   TextEditingController get editingController => _editingController;
 
-  List<StationStatus> get filteredStations => _filteredStations;
+  List<int> get distances => _distances;
 
   Future<Map<int, int>> getStationDistances() async {
     var sortable = <int, int>{};
     Position currentPosition = await _geolocService.localizeUser();
-    var userPosition =
-        LatLng(currentPosition.latitude, currentPosition.longitude);
-    for (var stationInfo in _listStationInfo) {
-      var distance = await _geolocService.distanceBetween(userPosition.latitude,
-          userPosition.longitude, stationInfo.lat, stationInfo.lon);
+    _userPosition = LatLng(currentPosition.latitude, currentPosition.longitude);
+    for (var stationInfo in listStationInfo) {
+      var distance = await _geolocService.distanceBetween(
+          _userPosition.latitude,
+          _userPosition.longitude,
+          stationInfo.lat,
+          stationInfo.lon);
       sortable[stationInfo.stationId] = distance.ceil();
     }
     return sortable;
   }
 
   void getClosestStationsWithBikes() async {
-    _listStationStatus = await _api.fetchStatus();
-    _listStationInfo = await _api.fetchInfo();
-    _listStationsWithBikes = _listStationStatus
+    _listStationsWithBikes = listStationStatus
         .where((stationStatus) => stationStatus.numBikesAvailable > 0)
         .toList();
-    var distances = await getStationDistances();
-    _listStationsWithBikes
-        .sort((a, b) => distances[a.stationId] - distances[b.stationId]);
+    var stationDistances = await getStationDistances();
+    _distances = stationDistances.values.toList();
+    _distances.sort();
+    _listStationsWithBikes.sort((a, b) =>
+        stationDistances[a.stationId] - stationDistances[b.stationId]);
     _listStationNameSortedByDistance =
         _listStationsWithBikes.map((stationStatus) {
-      var stationInfo = _listStationInfo
+      var stationInfo = listStationInfo
           .where(
               (stationInfo) => stationInfo.stationId == stationStatus.stationId)
           .toList()[0];
@@ -64,21 +66,39 @@ class DepartureViewModel extends ChangeNotifier {
   }
 
   double getAvailability(int index, String type) {
+    var stationInfo = listStationInfo
+        .where((stationInfo) =>
+            stationInfo.stationId == _listStationsWithBikes[index].stationId)
+        .toList()[0];
     return type == "mechanical"
-        ? _listStationStatus[index].numBikesAvailableTypes.mechanical /
-            _listStationInfo[index].capacity
-        : _listStationStatus[index].numBikesAvailableTypes.ebike /
-            _listStationInfo[index].capacity;
+        ? _listStationsWithBikes[index].numBikesAvailableTypes.mechanical /
+            stationInfo.capacity
+        : _listStationsWithBikes[index].numBikesAvailableTypes.ebike /
+            stationInfo.capacity;
   }
 
   Color getAvailabilityColor(int index, String type) {
     var availability = getAvailability(index, type);
     if (availability < 0.2) {
-      return Colors.red;
+      return Color(0xFFF44336);
     }
     if (availability > 0.5) {
-      return Colors.lightGreenAccent;
+      return Color(0xFF4CAF50);
     }
-    return Colors.orangeAccent;
+    return Color(0xFFFF9800);
+  }
+
+  void toNavigationPage(BuildContext context, num stationId) {
+    final stationInfo =
+        listStationInfo.where((s) => s.stationId == stationId).toList().first;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => NavigationScreen(
+                departure: _userPosition,
+                arrival: LatLng(stationInfo.lat, stationInfo.lon),
+              )),
+    );
+    notifyListeners();
   }
 }

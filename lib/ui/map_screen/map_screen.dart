@@ -14,7 +14,7 @@ class MapScreen extends StatelessWidget {
       viewModel: MapViewModel(),
       onModelReady: (model) {
         model.localizeUserLive();
-        model.fetchStations();
+        model.getStationMarkers(context);
       },
       builder: (context, model, child) => Scaffold(
         body: FlutterMap(
@@ -39,7 +39,7 @@ class MapScreen extends StatelessWidget {
                         builder: (ctx) => new Container(
                           child: Icon(
                             Icons.my_location,
-                            color: Colors.blueAccent,
+                            color: Colors.blue[500],
                           ),
                         ),
                       ),
@@ -49,19 +49,21 @@ class MapScreen extends StatelessWidget {
           ],
         ),
         floatingActionButton: SpeedDial(
+          backgroundColor: Color(0xFF8448bf),
           animatedIcon: AnimatedIcons.menu_close,
           marginRight: 25.0,
           children: [
             SpeedDialChild(
                 child: Icon(Icons.directions_bike),
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.blueAccent,
                 label: "Departure",
                 onTap: () => model.toDeparturePage(context)),
             SpeedDialChild(
                 child: Icon(Icons.build),
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.red[500],
                 label: "Arrival",
-                onTap: () => model.toArrivalPage(context)),
+                onTap: () => model.toArrivalPage(
+                    context, model.listStationInfo, model.listStationStatus)),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
