@@ -10,7 +10,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Velibetter',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        brightness: Brightness.light,
+        backgroundColor: Color(0xFFEEEEEE),
+        primaryColor: Color(0xFF4CAF50),
+
+        textTheme: TextTheme(
+          headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+          title: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+          body1: TextStyle(fontSize: 14.0),
+        ),
       ),
       home: MapScreen(),
     );

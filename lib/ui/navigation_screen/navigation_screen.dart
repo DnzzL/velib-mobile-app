@@ -1,4 +1,3 @@
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -52,7 +51,7 @@ class NavigationScreen extends StatelessWidget {
                               Polyline(
                                   points: model.points,
                                   strokeWidth: 4.0,
-                                  color: Colors.grey),
+                                  color: Colors.deepPurple[300]),
                             ],
                           ),
                           new MarkerLayerOptions(markers: [
@@ -63,7 +62,7 @@ class NavigationScreen extends StatelessWidget {
                               builder: (ctx) => new Container(
                                 child: Icon(
                                   Icons.location_on,
-                                  color: Colors.blueAccent,
+                                  color: Colors.blue[500],
                                 ),
                               ),
                             ),
@@ -74,7 +73,7 @@ class NavigationScreen extends StatelessWidget {
                               builder: (ctx) => new Container(
                                 child: Icon(
                                   Icons.my_location,
-                                  color: Colors.green,
+                                  color: Colors.green[500],
                                 ),
                               ),
                             ),
@@ -84,8 +83,8 @@ class NavigationScreen extends StatelessWidget {
                               point: model.arrival,
                               builder: (ctx) => new Container(
                                 child: Icon(
-                                  CommunityMaterialIcons.flag_checkered,
-                                  color: Colors.red,
+                                  Icons.location_on,
+                                  color: Colors.red[500],
                                 ),
                               ),
                             ),

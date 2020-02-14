@@ -7,8 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:velibetter/core/models/NavigationStep.dart';
 import 'package:velibetter/core/services/RouteService.dart';
-import 'package:velibetter/ui/arrival_screen/arrival_screen.dart';
-import 'package:velibetter/ui/departure_screen/departure_screen.dart';
 
 class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
   RouteService _routeService = RouteService();
@@ -61,7 +59,6 @@ class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
         LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
     geolocator.getPositionStream(locationOptions).listen((Position position) {
       if (position != null) {
-        print(position.latitude);
         _userPosition = LatLng(position.latitude, position.longitude);
         mapController.move(_userPosition, 14.0);
         notifyListeners();
@@ -86,21 +83,5 @@ class NavigationViewModel extends navigation_viewmodel.ChangeNotifier {
       default:
         return CommunityMaterialIcons.navigation;
     }
-  }
-
-  void toDeparturePage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => DepartureScreen()),
-    );
-    notifyListeners();
-  }
-
-  void toArrivalPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ArrivalScreen()),
-    );
-    notifyListeners();
   }
 }

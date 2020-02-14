@@ -19,6 +19,7 @@ class ArrivalViewModel extends ChangeNotifier {
   List<String> _listStationNameSortedByDistance;
   LatLng _userPosition;
   TextEditingController _editingController = TextEditingController();
+  List<int> _distances;
 
   List<StationStatus> get listStationsWithDocks => _listStationsWithDocks;
 
@@ -26,6 +27,8 @@ class ArrivalViewModel extends ChangeNotifier {
       _listStationNameSortedByDistance;
 
   TextEditingController get editingController => _editingController;
+
+  List<int> get distances => _distances;
 
   Future<Map<int, int>> getStationDistances() async {
     var sortable = <int, int>{};
@@ -46,9 +49,11 @@ class ArrivalViewModel extends ChangeNotifier {
     _listStationsWithDocks = listStationStatus
         .where((station) => station.numDocksAvailable > 0)
         .toList();
-    var distances = await getStationDistances();
-    _listStationsWithDocks
-        .sort((a, b) => distances[a.stationId] - distances[b.stationId]);
+    var stationDistances = await getStationDistances();
+    _distances = stationDistances.values.toList();
+    _distances.sort();
+    _listStationsWithDocks.sort((a, b) =>
+        stationDistances[a.stationId] - stationDistances[b.stationId]);
     _listStationNameSortedByDistance =
         _listStationsWithDocks.map((stationStatus) {
       var stationInfo = listStationInfo
@@ -72,12 +77,12 @@ class ArrivalViewModel extends ChangeNotifier {
   Color getAvailabilityColor(int index) {
     var availability = getAvailability(index);
     if (availability < 0.2) {
-      return Colors.red;
+      return Color(0xFFF44336);
     }
     if (availability > 0.5) {
-      return Colors.lightGreenAccent;
+      return Color(0xFF4CAF50);
     }
-    return Colors.orangeAccent;
+    return Color(0xFFFF9800);
   }
 
   void toNavigationPage(BuildContext context, num stationId) {

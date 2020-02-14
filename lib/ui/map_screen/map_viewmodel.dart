@@ -44,7 +44,7 @@ class MapViewModel extends ChangeNotifier {
                   child: Icon(
                     Icons.location_on,
                     size: 20,
-                    color: Colors.redAccent,
+                    color: Color(0xFFF44336),
                   ),
                 )))),
       );

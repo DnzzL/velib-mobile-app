@@ -30,7 +30,8 @@ dependencies:
   geolocator: 5.2.0
   flutter_speed_dial: 1.2.5
   loading_animations: 2.1.0
-  flutter_cache_manager: 1.1.3
+  two_letter_icon: ^0.0.1
+  flutter_cache_store: 0.7.2
   geojson: 0.8.0
   community_material_icon: 3.5.95
   flutter_dotenv: 2.1.0

@@ -62,7 +62,7 @@ class DetailScreen extends StatelessWidget {
                         ),
                         Container(
                           width: 80.0,
-                          child: new Divider(color: Colors.green),
+                          child: new Divider(color: Colors.green[500]),
                         ),
                         Row(
                           children: <Widget>[
@@ -103,7 +103,7 @@ class DetailScreen extends StatelessWidget {
                                 height: 32.0,
                                 width: 32.0,
                                 decoration: ShapeDecoration(
-                                  color: Colors.lightGreen,
+                                  color: Colors.green[500],
                                   shape: CircleBorder(),
                                 ),
                                 child: new IconButton(
@@ -127,7 +127,7 @@ class DetailScreen extends StatelessWidget {
                                 height: 32.0,
                                 width: 32.0,
                                 decoration: ShapeDecoration(
-                                  color: Colors.red,
+                                  color: Colors.red[500],
                                   shape: CircleBorder(),
                                 ),
                                 child: new IconButton(
@@ -158,7 +158,7 @@ class DetailScreen extends StatelessWidget {
                                 height: 32.0,
                                 width: 32.0,
                                 decoration: ShapeDecoration(
-                                  color: Colors.lightGreen,
+                                  color: Colors.green[500],
                                   shape: CircleBorder(),
                                 ),
                                 child: new IconButton(
@@ -182,7 +182,7 @@ class DetailScreen extends StatelessWidget {
                                 height: 32.0,
                                 width: 32.0,
                                 decoration: ShapeDecoration(
-                                  color: Colors.red,
+                                  color: Colors.red[500],
                                   shape: CircleBorder(),
                                 ),
                                 child: new IconButton(
@@ -216,7 +216,7 @@ class DetailScreen extends StatelessWidget {
                       height: 32.0,
                       width: 32.0,
                       decoration: ShapeDecoration(
-                        color: Colors.blue,
+                        color: Color(0xFF84BF48),
                         shape: CircleBorder(),
                       ),
                       child: new IconButton(
@@ -246,13 +246,13 @@ class DetailScreen extends StatelessWidget {
                       height: 32.0,
                       width: 32.0,
                       decoration: ShapeDecoration(
-                        color: Colors.blue,
+                        color: Color(0xFF65BEC2),
                         shape: CircleBorder(),
                       ),
                       child: new IconButton(
                           iconSize: 16.0,
                           icon: new Icon(
-                            CommunityMaterialIcons.flash,
+                            CommunityMaterialIcons.bike,
                             color: Colors.white,
                           ),
                           onPressed: null),
@@ -276,7 +276,7 @@ class DetailScreen extends StatelessWidget {
                       height: 32.0,
                       width: 32.0,
                       decoration: ShapeDecoration(
-                        color: Colors.blue,
+                        color: Colors.blue[500],
                         shape: CircleBorder(),
                       ),
                       child: new IconButton(
@@ -304,33 +304,16 @@ class DetailScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(12.0),
                       ),
-                      color: Color(0xFFC5E1A5),
-                      textColor: Color(0xFF1B5E20),
+                      color: Colors.lightGreen[200],
+                      textColor: Colors.green[900],
                       disabledColor: Colors.grey,
                       disabledTextColor: Colors.black,
                       padding: EdgeInsets.all(10.0),
-                      splashColor: Colors.blueAccent,
+                      splashColor: Colors.blue[500],
                       onPressed: () => model.toNavigationPage(
                           context, model.listStationInfo[model.stationIndex]),
                       child: Text(
-                        "Start from here",
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                    ),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(12.0),
-                      ),
-                      color: Color(0xFFFFCDD2),
-                      textColor: Color(0xFFB71C1C),
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
-                      padding: EdgeInsets.all(10.0),
-                      splashColor: Colors.blueAccent,
-                      onPressed: () => model.toNavigationPage(
-                          context, model.listStationInfo[model.stationIndex]),
-                      child: Text(
-                        "Arrive here",
+                        "Go",
                         style: TextStyle(fontSize: 20.0),
                       ),
                     ),

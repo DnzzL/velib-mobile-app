@@ -31,51 +31,23 @@ class ArrivalScreen extends StatelessWidget {
                       ? ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount: 10,
+                          itemCount: model.listStationsWithDocks.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Card(
                               elevation: 8.0,
                               margin: new EdgeInsets.symmetric(
                                   horizontal: 0.0, vertical: 1.0),
                               child: Container(
-                                decoration: BoxDecoration(
-                                    color: Color.fromRGBO(64, 75, 96, .9)),
                                 child: ListTile(
                                   contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 20.0, vertical: 10.0),
+                                      horizontal: 20.0, vertical: 8.0),
                                   title: Text(
-                                    '${model.listStationNameSortedByDistance[index]}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
+                                    '${model.listStationNameSortedByDistance[index]} (${model.distances[index]} m)',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                                  subtitle: Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 1,
-                                        child: Padding(
-                                            padding:
-                                                EdgeInsets.only(left: 10.0),
-                                            child: Text(
-                                                "${model.listStationStatus[index].numDocksAvailable} docks",
-                                                style: TextStyle(
-                                                    color: Colors.white))),
-                                      ),
-                                      Expanded(
-                                        child: LinearProgressIndicator(
-                                            backgroundColor: Color.fromRGBO(
-                                                209, 224, 224, 0.2),
-                                            value: model.getAvailability(index),
-                                            valueColor: AlwaysStoppedAnimation(
-                                                model.getAvailabilityColor(
-                                                    index))),
-                                      ),
-                                    ],
-                                  ),
-
-                                  trailing: Icon(Icons.keyboard_arrow_right,
-                                      color: Colors.white, size: 30.0),
+                                  subtitle: _getStatusLine(model, index),
                                   onTap: () => model.toNavigationPage(
                                       context,
                                       model.listStationsWithDocks[index]
@@ -86,10 +58,47 @@ class ArrivalScreen extends StatelessWidget {
                           },
                         )
                       : LoadingDoubleFlipping.circle(
-                          backgroundColor: Colors.blueAccent,
+                          backgroundColor: Colors.blue[500],
                         ),
                 ),
               ),
             ));
+  }
+
+  Widget _getStatusLine(ArrivalViewModel model, int index) {
+    return Row(
+      children: <Widget>[
+        Container(
+          height: 28.0,
+          width: 28.0,
+          margin: EdgeInsets.fromLTRB(5, 5, 30, 2),
+          decoration: ShapeDecoration(
+            color: Colors.blue[500],
+            shape: CircleBorder(),
+          ),
+          child: new IconButton(
+              iconSize: 13.0,
+              icon: new Icon(
+                Icons.home,
+                color: Colors.white,
+              ),
+              onPressed: null),
+        ),
+        Expanded(
+            flex: 1,
+            child: Container(
+              child: LinearProgressIndicator(
+                  backgroundColor: Colors.grey[300],
+                  value: model.getAvailability(index),
+                  valueColor: AlwaysStoppedAnimation(
+                      model.getAvailabilityColor(index))),
+            )),
+        Container(
+          margin: EdgeInsets.fromLTRB(15, 0, 10, 0),
+          child:
+              Text("${model.listStationsWithDocks[index].numDocksAvailable}"),
+        )
+      ],
+    );
   }
 }
