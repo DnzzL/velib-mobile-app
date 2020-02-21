@@ -82,6 +82,14 @@ class DetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                Container(
+                    margin: EdgeInsets.only(top: 35),
+                    child: IconButton(
+                        icon:
+                            new Icon(Icons.arrow_back_ios, color: Colors.black),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        })),
               ],
             ),
             Container(

@@ -26,47 +26,57 @@ class DepartureScreen extends StatelessWidget {
         onModelReady: (model) => model.getClosestStationsWithBikes(),
         builder: (context, model, child) => Scaffold(
               body: Container(
-                child: Container(
-                    child: model.listStationsWithBikes != null &&
-                            model.listStationNameSortedByDistance != null
-                        ? ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: model.listStationsWithBikes.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Card(
-                                elevation: 2.0,
-                                margin: new EdgeInsets.symmetric(
-                                    horizontal: 0.0, vertical: 1.0),
-                                child: Container(
-                                  child: ListTile(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 14.0),
-                                    title: Text(
-                                      '${model.listStationNameSortedByDistance[index]} (${model.distances[index]} m)',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                child: Stack(children: <Widget>[
+                  Container(
+                      child: model.listStationsWithBikes != null &&
+                              model.listStationNameSortedByDistance != null
+                          ? ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: model.listStationsWithBikes.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Card(
+                                  elevation: 2.0,
+                                  margin: new EdgeInsets.symmetric(
+                                      horizontal: 0.0, vertical: 1.0),
+                                  child: Container(
+                                    child: ListTile(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 14.0),
+                                      title: Text(
+                                        '${model.listStationNameSortedByDistance[index]} (${model.distances[index]} m)',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+                                      subtitle: Column(
+                                        children: <Widget>[
+                                          _getStatusLine(
+                                              model, index, "mechanical"),
+                                          _getStatusLine(model, index, "ebike")
+                                        ],
+                                      ),
+                                      onTap: () => model.toNavigationPage(
+                                          context,
+                                          model.listStationsWithBikes[index]
+                                              .stationId),
                                     ),
-                                    // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                                    subtitle: Column(
-                                      children: <Widget>[
-                                        _getStatusLine(
-                                            model, index, "mechanical"),
-                                        _getStatusLine(model, index, "ebike")
-                                      ],
-                                    ),
-                                    onTap: () => model.toNavigationPage(
-                                        context,
-                                        model.listStationsWithBikes[index]
-                                            .stationId),
                                   ),
-                                ),
-                              );
-                            },
-                          )
-                        : LoadingDoubleFlipping.circle(
-                            backgroundColor: Colors.blue[500],
-                          )),
+                                );
+                              },
+                            )
+                          : LoadingDoubleFlipping.circle(
+                              backgroundColor: Colors.blue[500],
+                            )),
+                  Container(
+                      margin: EdgeInsets.only(top: 35),
+                      child: IconButton(
+                          icon: new Icon(Icons.arrow_back_ios,
+                              color: Colors.black),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          })),
+                ]),
               ),
             ));
   }

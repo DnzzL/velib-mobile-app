@@ -34,62 +34,73 @@ class NavigationScreen extends StatelessWidget {
                     Container(
                       constraints: BoxConstraints.tightForFinite(height: 250),
                       margin: EdgeInsets.all(0),
-                      child: FlutterMap(
-                        mapController: model.mapController,
-                        options: new MapOptions(
-                          center: model.departure,
-                          zoom: 16.0,
-                        ),
-                        layers: [
-                          new TileLayerOptions(
-                            urlTemplate:
-                                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                            subdomains: ['a', 'b', 'c'],
-                          ),
-                          PolylineLayerOptions(
-                            polylines: [
-                              Polyline(
-                                  points: model.points,
-                                  strokeWidth: 4.0,
-                                  color: Colors.deepPurple[300]),
+                      child: Stack(
+                        children: <Widget>[
+                          FlutterMap(
+                            mapController: model.mapController,
+                            options: new MapOptions(
+                              center: model.departure,
+                              zoom: 16.0,
+                            ),
+                            layers: [
+                              new TileLayerOptions(
+                                urlTemplate:
+                                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                subdomains: ['a', 'b', 'c'],
+                              ),
+                              PolylineLayerOptions(
+                                polylines: [
+                                  Polyline(
+                                      points: model.points,
+                                      strokeWidth: 4.0,
+                                      color: Colors.deepPurple[300]),
+                                ],
+                              ),
+                              new MarkerLayerOptions(markers: [
+                                new Marker(
+                                  width: 30.0,
+                                  height: 30.0,
+                                  point: model.departure,
+                                  builder: (ctx) => new Container(
+                                    child: Icon(
+                                      Icons.location_on,
+                                      color: Colors.blue[500],
+                                    ),
+                                  ),
+                                ),
+                                new Marker(
+                                  width: 30.0,
+                                  height: 30.0,
+                                  point: model.userPosition,
+                                  builder: (ctx) => new Container(
+                                    child: Icon(
+                                      Icons.my_location,
+                                      color: Colors.green[500],
+                                    ),
+                                  ),
+                                ),
+                                new Marker(
+                                  width: 30.0,
+                                  height: 30.0,
+                                  point: model.arrival,
+                                  builder: (ctx) => new Container(
+                                    child: Icon(
+                                      Icons.location_on,
+                                      color: Colors.red[500],
+                                    ),
+                                  ),
+                                ),
+                              ]),
                             ],
                           ),
-                          new MarkerLayerOptions(markers: [
-                            new Marker(
-                              width: 30.0,
-                              height: 30.0,
-                              point: model.departure,
-                              builder: (ctx) => new Container(
-                                child: Icon(
-                                  Icons.location_on,
-                                  color: Colors.blue[500],
-                                ),
-                              ),
-                            ),
-                            new Marker(
-                              width: 30.0,
-                              height: 30.0,
-                              point: model.userPosition,
-                              builder: (ctx) => new Container(
-                                child: Icon(
-                                  Icons.my_location,
-                                  color: Colors.green[500],
-                                ),
-                              ),
-                            ),
-                            new Marker(
-                              width: 30.0,
-                              height: 30.0,
-                              point: model.arrival,
-                              builder: (ctx) => new Container(
-                                child: Icon(
-                                  Icons.location_on,
-                                  color: Colors.red[500],
-                                ),
-                              ),
-                            ),
-                          ]),
-
+                          Container(
+                              margin: EdgeInsets.only(top: 35),
+                              child: IconButton(
+                                  icon: new Icon(Icons.arrow_back_ios,
+                                      color: Colors.black),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  })),
                         ],
                       ),
                     ),

@@ -26,7 +26,8 @@ class ArrivalScreen extends StatelessWidget {
         onModelReady: (model) => model.getClosestStationsWithDocks(),
         builder: (context, model, child) => Scaffold(
               body: Container(
-                child: Container(
+                  child: Stack(children: <Widget>[
+                Container(
                   child: model.listStationNameSortedByDistance != null
                       ? ListView.builder(
                           scrollDirection: Axis.vertical,
@@ -61,7 +62,15 @@ class ArrivalScreen extends StatelessWidget {
                           backgroundColor: Colors.blue[500],
                         ),
                 ),
-              ),
+                Container(
+                    margin: EdgeInsets.only(top: 35),
+                    child: IconButton(
+                        icon:
+                            new Icon(Icons.arrow_back_ios, color: Colors.black),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        })),
+              ])),
             ));
   }
 
